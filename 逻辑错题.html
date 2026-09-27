@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>管综逻辑错题本</title>
+<style>
+:root{--accent:#ff8528;--ink:#1a1a1a;--paper:#ffffff;--soft:#f7f5f2;--line:#e5e0da}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:auto}
+body{font-family:"Century Schoolbook","Noto Serif SC","Songti SC",serif;color:var(--ink);background:var(--paper);line-height:1.9}
+#side{position:fixed;top:0;left:0;bottom:0;width:264px;overflow-y:auto;border-right:1px solid var(--line);background:var(--paper);padding:28px 18px 60px;z-index:30;transition:transform .25s ease;transform:translateX(-100%);box-shadow:none}
+body.nav-on #side{transform:none;box-shadow:8px 0 30px rgba(0,0,0,.08)}
+#navTrigger{position:fixed;top:0;left:0;bottom:0;width:26px;z-index:25;cursor:pointer}
+#navTrigger::after{content:"›";position:fixed;left:6px;top:50%;color:#ccc;font-size:18px;transition:.2s}
+#navTrigger:hover::after{color:var(--accent);transform:scale(1.3)}
+#navBtn{border:1px solid var(--line);background:#fff;border-radius:8px;width:34px;height:32px;cursor:pointer;font-size:15px;line-height:1;color:var(--ink);flex:none}
+#navBtn:hover{border-color:var(--accent);color:var(--accent)}
+#side h1{font-size:19px;letter-spacing:.05em;margin-bottom:4px}
+#side .sub{font-size:12px;color:#999;margin-bottom:18px}
+.nch{margin-top:14px;font-weight:700;font-size:14px}
+.nch a{color:var(--ink);text-decoration:none;display:flex;align-items:baseline;gap:8px}
+.nch a:hover{color:var(--accent)}
+.ntp{padding-left:14px;font-size:12.5px;line-height:1.6}
+.ntp a{color:#666;text-decoration:none;display:flex;align-items:baseline;gap:8px}
+.ntp a:hover{color:var(--accent)}
+.ncnt{font-size:11px;color:#bbb;font-weight:400;flex:none}
+.nch .ncnt{color:var(--accent);font-size:12px}
+.nprog{font-size:11px;color:#bbb;font-weight:400;margin-left:auto;font-variant-numeric:tabular-nums;flex:none}
+.nprog.done{color:var(--accent)}
+.cnt{font-size:12px;color:#bbb;font-weight:400;margin-left:12px;letter-spacing:.05em}
+#main{margin:0 auto;max-width:860px;padding:60px 64px 200px}
+#topbar{position:fixed;top:0;left:0;right:0;height:52px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 24px;z-index:9}
+#topbar .stat{font-size:13px;color:#888}
+#topbar input{flex:0 0 220px;border:1px solid var(--line);border-radius:2em;padding:5px 14px;font-size:13px;outline:none;font-family:inherit}
+#topbar input:focus{border-color:var(--accent)}
+.tgl{margin-left:auto;font-size:13px;border:1px solid var(--ink);border-radius:2em;padding:4px 16px;cursor:pointer;background:transparent;font-family:inherit}
+.tgl.on{background:var(--ink);color:#fff}
+.part{font-size:13px;letter-spacing:.35em;color:var(--accent);margin:80px 0 -40px;text-transform:uppercase}
+.chapter{font-size:26px;margin:72px 0 8px;padding-top:20px;letter-spacing:.02em;display:flex;align-items:baseline;gap:14px}
+.chapter .chnum{font-size:13px;color:var(--accent);letter-spacing:.15em}
+.topic{font-size:17px;margin:44px 0 14px;padding-left:12px;border-left:3px solid var(--ink)}
+.box{border:1.5px dashed #b8b2aa;background:var(--soft);padding:14px 20px;margin:0 0 22px;font-size:14.5px}
+.box p{margin:6px 0}
+.note{color:#8a857e;font-size:13.5px;padding:6px 0 6px 18px;border-left:2px solid var(--line);margin:2px 0 26px}
+.note p{margin:4px 0}
+.prob{margin:26px 0 4px;font-size:15.5px}
+.pid{color:#2775B6;font-weight:700;margin-right:6px}
+.cbs{display:inline-flex;gap:5px;margin-right:10px;vertical-align:middle}
+.cb{width:15px;height:15px;border:1.5px solid #b8b2aa;border-radius:3px;display:inline-block;cursor:pointer;transition:.15s;background:#fff}
+.cb:hover{border-color:var(--accent)}
+.cb.on{background:var(--accent);border-color:var(--accent)}
+.cb.on::after{content:"✓";color:#fff;font-size:11px;display:flex;justify-content:center;line-height:14px}
+.pline{margin:4px 0}
+.pcard{border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:8px;contain:layout style}
+.opts{margin:8px 0;display:flex;flex-wrap:wrap;gap:6px 22px}
+.opt{cursor:pointer;padding:2px 10px;border-radius:6px;border:1px solid transparent;transition:.15s}
+.opt:hover{border-color:var(--accent);color:var(--accent)}
+.opt.right{background:#e8f5e9;border-color:#2e7d32;color:#2e7d32;font-weight:700}
+.opt.wrong{background:#fdecea;border-color:#c0392b;color:#c0392b;text-decoration:line-through}
+.solTgl{font-size:12.5px;color:var(--accent);background:none;border:none;cursor:pointer;padding:0;margin:4px 0;font-family:inherit}
+.solTgl:hover{text-decoration:underline}
+.psolve.force-hide{display:none!important}
+.psolve.force-show{display:block!important}
+.view-know .psolve{display:none}
+.fig{margin:12px 0}
+.fig img{max-width:100%}
+.view-terms .solve-only,.view-terms .psolve{display:none}
+.view-terms .psolve.force-show{display:block!important}
+.view-terms .psolve.force-show .solve-only{display:block!important}
+.view-know .prob,.view-know .pline,.view-know .note,.view-know p.solve-only,.view-know .opts,.view-know .solTgl{display:none}
+.dropdown{position:relative;margin-left:auto}
+.menu{position:absolute;top:100%;right:0;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.10);display:none;flex-direction:column;min-width:130px;overflow:hidden;z-index:20}
+.dropdown:hover .menu{display:flex}
+.menu button{border:none;background:none;padding:10px 18px;font-size:13px;text-align:left;cursor:pointer;font-family:inherit;color:var(--ink)}
+.menu button:hover{background:var(--soft);color:var(--accent)}
+.menu button.cur{font-weight:700;color:var(--accent)}
+.hide{display:none!important}
+.flt{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:16px;background:var(--soft)}
+.flab{font-size:11px;color:#999;margin:4px 0 6px;letter-spacing:.08em}
+.frow{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.frow button{border:1px solid var(--line);background:#fff;border-radius:2em;padding:2px 10px;font-size:11.5px;cursor:pointer;font-family:inherit;color:var(--ink)}
+.frow button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+#chFlt{width:100%;border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:12px;font-family:inherit;background:#fff;color:var(--ink)}
+.fstat{font-size:11px;color:var(--accent);margin-top:6px;min-height:14px}
+#progress{font-size:12px;color:var(--accent)}
+@media(max-width:900px){#main{padding:70px 22px 160px}}
+</style>
+</head>
+<body>
+<div id="navTrigger"></div>
+<nav id="side">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<h1>管综逻辑错题本</h1>
+<button id="navBtn2" title="收起目录" style="border:none;background:none;font-size:16px;cursor:pointer;color:#bbb">✕</button>
+</div>
+<div class="sub">老吕《要点7讲》《母题800练》 · 30 题</div>
+<div class="flt">
+<div class="flab">按打勾量筛选</div>
+<div class="frow" id="ckFlt">
+<button data-v="all" class="on">全部</button><button data-v="0">0 勾</button><button data-v="1">1 勾</button><button data-v="2">2 勾</button><button data-v="3">3 勾</button>
+</div>
+<div class="flab">按章节筛选</div>
+<select id="chFlt"><option value="all">全部章节</option><option value="1">第一章 概念与定义</option><option value="2">第二章 直言命题</option><option value="3">第三章 假言命题与推理</option><option value="4">第四章 三段论</option><option value="5">第五章 模态命题</option><option value="6">第六章 削弱</option><option value="7">第七章 支持</option><option value="8">第八章 假设</option><option value="9">第九章 解释</option><option value="10">第十章 推出与结论</option><option value="11">第十一章 评价与焦点</option><option value="12">第十二章 综合推理</option></select>
+<div class="fstat" id="fltStat"></div>
+</div>
+<div class="nch"><a href="#ch1">第一章 概念与定义<span class="nprog" data-p="W12-2008-46">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t1_1">身份重合与极限思考（外延关系求最值）<span class="nprog" data-p="W12-2008-46">0/3</span><span class="ncnt">1</span></a></div>
+<div class="nch"><a href="#ch2">第二章 直言命题<span class="nprog" data-p="">0/0</span><span class="ncnt">0</span></a></div>
+<div class="nch"><a href="#ch3">第三章 假言命题与推理<span class="nprog" data-p="">0/0</span><span class="ncnt">0</span></a></div>
+<div class="nch"><a href="#ch4">第四章 三段论<span class="nprog" data-p="">0/0</span><span class="ncnt">0</span></a></div>
+<div class="nch"><a href="#ch5">第五章 模态命题<span class="nprog" data-p="">0/0</span><span class="ncnt">0</span></a></div>
+<div class="nch"><a href="#ch6">第六章 削弱<span class="nprog" data-p="W4-2022经49">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t6_1">转移话题的识别与客观事实反驳<span class="nprog" data-p="W4-2022经49">0/3</span><span class="ncnt">1</span></a></div>
+<div class="nch"><a href="#ch7">第七章 支持<span class="nprog" data-p="7讲334-例5.4,7讲337-例5.7,7讲342-例5.12,真题2017-味蕾恶性循环,真题2012-灰质与智商变化,模考1-30,模考1-37">0/21</span><span class="ncnt">7</span></a></div>
+<div class="ntp"><a href="#t7_1">原因断定的支持五法与"最不能支持"反向题<span class="nprog" data-p="7讲334-例5.4">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t7_2">结果预测的支持：肯 P 法与力度词原则<span class="nprog" data-p="7讲337-例5.7">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t7_3">措施目的断定的支持：现有/其他措施不可行<span class="nprog" data-p="7讲342-例5.12">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t7_4">"除哪项外均能支持"反向题：逐项定性法<span class="nprog" data-p="真题2017-味蕾恶性循环,真题2012-灰质与智商变化">0/6</span><span class="ncnt">2</span></a></div>
+<div class="ntp"><a href="#t7_5">支持题：论据与结论概念跳跃时用搭桥法<span class="nprog" data-p="模考1-30">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t7_6">因果断定的支持：给出因果机制（因果相关）<span class="nprog" data-p="模考1-37">0/3</span><span class="ncnt">1</span></a></div>
+<div class="nch"><a href="#ch8">第八章 假设<span class="nprog" data-p="7讲372-题20">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t8_1">假设题：搭桥法与取非验证<span class="nprog" data-p="7讲372-题20">0/3</span><span class="ncnt">1</span></a></div>
+<div class="nch"><a href="#ch9">第九章 解释<span class="nprog" data-p="7讲394-例6.9,7讲396-题2,模考1-35">0/9</span><span class="ncnt">3</span></a></div>
+<div class="ntp"><a href="#t9_1">数字比例型矛盾的解释：分子分母思维<span class="nprog" data-p="7讲394-例6.9">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t9_2">暗含比较的解释题：从对象差异入手<span class="nprog" data-p="7讲396-题2">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t9_3">措施反效果的解释：找措施自身造成反效果的新机制<span class="nprog" data-p="模考1-35">0/3</span><span class="ncnt">1</span></a></div>
+<div class="nch"><a href="#ch10">第十章 推出与结论<span class="nprog" data-p="W44-2009-31">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t10_1">收敛思维：题干断定为准，区分主观认知与客观事实<span class="nprog" data-p="W44-2009-31">0/3</span><span class="ncnt">1</span></a></div>
+<div class="nch"><a href="#ch11">第十一章 评价与焦点<span class="nprog" data-p="W5-2014-27,W50-2023经48,模考1-38,真题2023-36">0/12</span><span class="ncnt">4</span></a></div>
+<div class="ntp"><a href="#t11_1">谬误类似比较：客观事实 ≠ 主观认知<span class="nprog" data-p="W5-2014-27">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t11_2">论证结构拆分（箭头图题）<span class="nprog" data-p="W50-2023经48">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t11_3">论证方式类似：稻草人谬误（曲解极端化）<span class="nprog" data-p="模考1-38">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t11_4">对话评价题：分别锁定双方立场的层面核心<span class="nprog" data-p="真题2023-36">0/3</span><span class="ncnt">1</span></a></div>
+<div class="nch"><a href="#ch12">第十二章 综合推理<span class="nprog" data-p="W13-2013-47,模考1-44,模考1-49,模考1-51,模考1-52,真题2023-42,真题2023-52,真题2023-55,真题2025-气候观点反驳,真题2025-果树阔叶树,真题2025-监考排班54,模考2-复合任务指令,真题2002-分居者同居">0/39</span><span class="ncnt">13</span></a></div>
+<div class="ntp"><a href="#t12_1">数量计算：概念交叉求最值（极限思考）<span class="nprog" data-p="W13-2013-47">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t12_2">选人规则题：按分歧条件分类讨论<span class="nprog" data-p="模考1-44">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t12_3">数量真假话题：先锁矛盾判断，其余为真列方程<span class="nprog" data-p="模考1-49">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t12_4">排班题：假言逆否压缩范围 + 配额填满<span class="nprog" data-p="模考1-51,模考1-52">0/6</span><span class="ncnt">2</span></a></div>
+<div class="ntp"><a href="#t12_5">数字密码题：翻译算术约束<span class="nprog" data-p="真题2023-42">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t12_6">数值推理题：整数约束 + 反证锁定<span class="nprog" data-p="真题2023-52">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t12_7">考评矩阵题：行列配额 + 联动排异<span class="nprog" data-p="真题2023-55">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t12_8">多方观点关系判断：反驳 = 直接否定对方主张<span class="nprog" data-p="真题2025-气候观点反驳">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t12_9">直言命题连锁推理：全称否定 + 特称肯定 ⇒ 特称否定<span class="nprog" data-p="真题2025-果树阔叶树">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t12_10">排班题进阶：人次配额 + 同时段唯一性，“全单独假设”反证<span class="nprog" data-p="真题2025-监考排班54">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t12_11">符号序列题：按递归定义逐层"括号化"还原结构<span class="nprog" data-p="模考2-复合任务指令">0/3</span><span class="ncnt">1</span></a></div>
+<div class="ntp"><a href="#t12_12">数量关系型结论推出：用配对关系对消双侧人数<span class="nprog" data-p="真题2002-分居者同居">0/3</span><span class="ncnt">1</span></a></div>
+</nav>
+<div id="topbar">
+<button id="navBtn" title="展开/收起目录">☰</button>
+<span class="stat">熟练度 <b id="progress">0 / 31</b></span>
+<input id="q" placeholder="搜索题号或题干…">
+<button class="tgl" id="expBtn" title="把勾框进度存为文件">导出进度</button>
+<button class="tgl" id="impBtn" title="从文件恢复进度">导入</button>
+<button class="tgl" id="clearBtn" title="清除所有选项作答痕迹">清除痕迹</button>
+<input type="file" id="impFile" accept=".json" style="display:none">
+<div class="dropdown">
+<button class="tgl" id="modeBtn">完整版 ▾</button>
+<div class="menu">
+<button data-v="full" class="cur">完整版</button>
+<button data-v="terms">题目版</button>
+<button data-v="know">知识点版</button>
+</div>
+</div>
+</div>
+<main id="main">
+<div class="note solve-only" data-ch="0"><p>按王诚《逻辑攻略》题型体系分类整理，每题附考点与核心思路。</p></div>
+<div class="part">第一部分 形式逻辑基础</div>
+<h2 id="ch1" class="chapter" data-ch="1"><span class="chnum">01</span>第一章 概念与定义<span class="cnt">1 题</span></h2>
+<h3 id="t1_1" class="topic" data-ch="1">身份重合与极限思考（外延关系求最值）<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="1"><p><strong>身份重合与极限思考（外延关系求最值）</strong></p><p>问"最少/最多"人数的身份关系题，用极限思考：先把身份按必须区分的属性（如性别）划分，再让其余身份尽量重合到同一人身上。逻辑题不考家庭伦理细节，亲属身份只作外延标记，能重合就重合。</p></div>
+<div class="pcard" data-ans="C" data-ch="1"><div class="pstem"><div class="prob"><span class="pid">W12-2008-46</span><span class="cbs"><span class="cb" data-p="W12-2008-46" data-k="0" title="点击标记"></span><span class="cb" data-p="W12-2008-46" data-k="1" title="点击标记"></span><span class="cb" data-p="W12-2008-46" data-k="2" title="点击标记"></span></span><span class="stem">（2008-46）陈先生要举办一个亲朋好友的聚会。他出面邀请了他父亲的姐夫，他姐夫的父亲，他哥哥的岳母，他岳母的哥哥。陈先生最少出面邀请了几个客人？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 未邀请客人。</span><span class="opt" data-l="B">B. 1 个客人。</span><span class="opt" data-l="C">C. 2 个客人。</span><span class="opt" data-l="D">D. 3 个客人。</span><span class="opt" data-l="E">E. 4 个客人。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 题型判定：概念外延关系题（身份重合求最少人数）。方法：极限思考——按必须区分的属性划分，其余身份尽量重合。四个身份中"哥哥的岳母"必为女性；若客人全是男性则岳母无法符合，故必有男有女，至少 2 人。而"父亲的姐夫""姐夫的父亲""岳母的哥哥"三个身份可全部重合到同一位男性身上，达到下界 2 人。A 与题干"出面邀请了"矛盾；B 无法容纳女性身份；D、E 不是最少。故本题选择 C。</p>
+</div></div>
+<h2 id="ch2" class="chapter" data-ch="2"><span class="chnum">02</span>第二章 直言命题<span class="cnt">0 题</span></h2>
+<h2 id="ch3" class="chapter" data-ch="3"><span class="chnum">03</span>第三章 假言命题与推理<span class="cnt">0 题</span></h2>
+<h2 id="ch4" class="chapter" data-ch="4"><span class="chnum">04</span>第四章 三段论<span class="cnt">0 题</span></h2>
+<h2 id="ch5" class="chapter" data-ch="5"><span class="chnum">05</span>第五章 模态命题<span class="cnt">0 题</span></h2>
+<div class="part">第二部分 论证逻辑</div>
+<h2 id="ch6" class="chapter" data-ch="6"><span class="chnum">06</span>第六章 削弱<span class="cnt">1 题</span></h2>
+<h3 id="t6_1" class="topic" data-ch="6">转移话题的识别与客观事实反驳<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="6"><p><strong>转移话题的识别与客观事实反驳</strong></p><p>面对事实性指控，有效反驳必须拿出与指控直接相关的客观事实证据；质疑动机、比烂、主观辩解、诉诸规则缺失，均属转移话题，反驳力度低。最优证据特征：第三方权威机构（中立可信）＋ 同批次/同对象（相关性最强）。</p></div>
+<div class="pcard" data-ans="E" data-ch="6"><div class="pstem"><div class="prob"><span class="pid">W4-2022经49</span><span class="cbs"><span class="cb" data-p="W4-2022经49" data-k="0" title="点击标记"></span><span class="cb" data-p="W4-2022经49" data-k="1" title="点击标记"></span><span class="cb" data-p="W4-2022经49" data-k="2" title="点击标记"></span></span><span class="stem">（2022经-49）近日，M 市消委会公布了 3 款知名薯片含有致癌物的检测报告并提醒消费者谨慎购买。该报告显示，S 公司生产的薯片样品中致癌物丙烯酰胺的含量超过 2000μg/kg，高于欧盟设定的基准水平值 750μg/kg。S 公司知晓后，立即对此事件作出了回应和反驳。以下哪项如果为真，作为 S 公司的回应和反驳最为有力？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 关于食物中丙烯酰胺的限量，我国目前没有出台相关的法规和标准。</span><span class="opt" data-l="B">B. 薯片类产品普遍含有丙烯酰胺，但吃一包薯片丙烯酰胺的实际摄入量极低。</span><span class="opt" data-l="C">C. S 公司的薯片因销量突出才受到消委会的关注，不排除竞争对手的恶意举报。</span><span class="opt" data-l="D">D. 大多数品牌的薯片丙烯酰胺都超标，消委会不应该只检测 S 公司等几个品牌的薯片。</span><span class="opt" data-l="E">E. 多家权威机构公布的相关检测报告显示，与消委会检测的薯片样品同批次的薯片抽检均无问题。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 题型判定：论证逻辑·削弱/反驳题（提问"回应和反驳最为有力"）。方法：客观事实反驳＋转移话题识别。消委会的指控是事实性的——"S 公司该批样品丙烯酰胺超标"，最有力的反驳是直接否定这一事实基础。E 项"多家权威机构"保障中立性与可信度，"同批次薯片抽检均无问题"保障相关性，正面击溃指控。A 诉诸规则缺失，且欧盟基准已构成参照，不否认实际危害；B 承认含有致癌物，"摄入量极低"属主观辩解，未否认超标事实；C 以"恶意举报"猜测动机；D"别家也超标"是比烂——四项本质都是转移话题。故本题选择 E。</p>
+<div class="note solve-only" data-ch="6"><p><strong>错因笔记（诉诸无知·规则缺失误当反驳依据）：</strong> 误选 A。把第一章"法律意识、规则意识"的常识模式误套到本题——2016-34 用规则支持权利主张，是因为那题的任务是"质疑商家阻挠退货的理由"；而本题任务是<strong>反驳事实性指控</strong>，且题干已给出替代参照（欧盟基准 750μg/kg），"我国没出台标准"既不能否定检测结果，也不能否定超标判断。识别规则：反驳事实只能用以事实为基础的证据；"没有规定／没有标准／没有证据"类选项属诉诸无知，凡题干已自带参照系（如此处的欧盟基准）时，此类选项直接排除。</p></div>
+</div></div>
+<h2 id="ch7" class="chapter" data-ch="7"><span class="chnum">07</span>第七章 支持<span class="cnt">7 题</span></h2>
+<h3 id="t7_1" class="topic" data-ch="7">原因断定的支持五法与"最不能支持"反向题<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="7"><p><strong>原因断定的支持五法与"最不能支持"反向题</strong></p><p>因果论证（原因断定 P → 现象）的支持五法：① 肯 P 法（直接肯定原因断定）；② 因果相关（直接肯定因果关系）；③ 无因无果（对照组：无此因则无此果）；④ 排除他因（指出不是其他原因导致结果，间接肯定）；⑤ 排除因果倒置。"最不能支持"属反向选择题：逐项先判"能否支持"，能支持的排除，无关项即答案。</p></div>
+<div class="pcard" data-ans="D" data-ch="7"><div class="pstem"><div class="prob"><span class="pid">7讲334-例5.4</span><span class="cbs"><span class="cb" data-p="7讲334-例5.4" data-k="0" title="点击标记"></span><span class="cb" data-p="7讲334-例5.4" data-k="1" title="点击标记"></span><span class="cb" data-p="7讲334-例5.4" data-k="2" title="点击标记"></span></span><span class="stem">（7讲·例5.4）某城市公园近年来鸟类种群数量显著下降。经长期观测，春秋迁徙季鸟类撞击建筑物死亡数量逐年递增，且死亡地点集中于新建的玻璃幕墙高层建筑周边。生态专家分析指出，这主要是因为玻璃幕墙反射天空与植被影像，使鸟类误判为可穿越空间或适宜栖息地，从而在高速飞行中撞击致死。以下哪项如果为真，最不能支持上述专家的观点？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 鸟类在迁徙和日常飞行中主要依靠视觉导航，强反光玻璃会干扰其方向判断，增加撞击风险。</span><span class="opt" data-l="B">B. 近五年该区域气候稳定，植被覆盖和昆虫数量均无显著变化。</span><span class="opt" data-l="C">C. 在没有大规模玻璃幕墙建筑的邻近自然保护区内，同期鸟类种群数量保持稳定甚至略有上升。</span><span class="opt" data-l="D">D. 该城市公园内设有多个观鸟亭和科普展板，介绍本地鸟类种类与习性。</span><span class="opt" data-l="E">E. 研究表明，鸟类撞击玻璃后死亡的事件在监控记录中呈逐年上升趋势，而非由于种群疾病暴发。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：论证逻辑·支持题——模型17 支持论点（原因断定 P：玻璃幕墙反射影像致误判撞击），问法为"最不能支持"的反向选择。套用原因断定支持五法逐项判定：A 项"视觉导航受强反光干扰"直接肯定因果链条，因果相关，支持，排除；B 项排除气候、植被、昆虫等替代原因，排除他因，支持，排除；C 项无玻璃幕墙（无因）则鸟类数量稳定（无果），无因无果对照，支持，排除；D 项观鸟亭、科普展板与鸟类数量下降无关，无关选项，不能支持；E 项排除"种群疾病暴发"这一他因，排除他因，支持，排除。故本题选择 D。</p>
+<div class="note solve-only" data-ch="7"><p><strong>错因笔记（排除他因识别失败）：</strong> 忘记了 B 项是排除他因——"气候稳定、植被覆盖和昆虫数量均无显著变化"看似陈述背景，实则排除了导致鸟类下降的主要替代解释，是间接支持。识别规则：在因果论证中，凡选项陈述"其他可疑因素没变化／不存在"，一律归入排除他因（支持）；尤其在"最不能支持"反向题中，不能只找"直接说因果"的选项，排除他因与无因无果都是支持，漏判就会把支持项错当答案。</p></div>
+</div></div>
+<h3 id="t7_2" class="topic" data-ch="7">结果预测的支持：肯 P 法与力度词原则<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="7"><p><strong>结果预测的支持：肯 P 法与力度词原则</strong></p><p>专家观点为"原因 → 结果预测 P"时，首选肯 P 法：选项直接给出"原因成立则 P 必然发生"的推理链，支持力度最强。力度词原则：含"可能""有些""或许"等弱化词的选项力度弱，竞争性选项中直接排除；题干预测未来而选项说"近年来/过去"，时间不一致，不选；题干无比较对象时选项引入新比较（"与 XX 相比"），无关新比较，不选。</p></div>
+<div class="pcard" data-ans="D" data-ch="7"><div class="pstem"><div class="prob"><span class="pid">7讲337-例5.7</span><span class="cbs"><span class="cb" data-p="7讲337-例5.7" data-k="0" title="点击标记"></span><span class="cb" data-p="7讲337-例5.7" data-k="1" title="点击标记"></span><span class="cb" data-p="7讲337-例5.7" data-k="2" title="点击标记"></span></span><span class="stem">（2024经济-例5.7）近年来，有些老牌纯文学期刊陆续推出纯文学 App，其界面设计精美、内容丰富，既有新旧文章阅读，也有读者评论、心得交流，更有刊物购买链接。只是这些纯文学 App 大多对过刊阅读要求付费，当月新刊也只提供几页的免费试读。有专家就此认为，纯文学 App 要求付费阅读，很难产生较强的用户黏性，未来不会走得太远。以下哪项如果为真，最能支持上述专家的观点？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 大多纯文学 App 有纸刊品牌力量支撑，提供多种美好阅读体验，虽实行"付费分享"政策，但可满足许多人热爱文学、享受文学的需求。</span><span class="opt" data-l="B">B. 近年来，纯文学期刊网络推广动作迟缓，早已失掉与网络文学争抢用户的最佳时机，在与博客、微博、公众号、视频号等新媒体的竞争中处境艰难。</span><span class="opt" data-l="C">C. 有些纯文学 App 当前很难判断潜在用户的付费意愿，在缺乏足够用户群明确支持的前提下贸然实行收费政策，可能会将部分读者挡在门外。</span><span class="opt" data-l="D">D. 纯文学 App 如果前期不能提供一定比例的免费阅读作品，就无法吸引用户；而一旦缺少用户支撑，这些纯文学网络平台就无法维持下去。</span><span class="opt" data-l="E">E. 有些网络文学和财经类 App 现在可以收费，是因为它们积累了大量的付费群体，同时也有足够的免费阅读内容，刚刚试水的纯文学 App 难以与之相比。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：论证逻辑·支持题——模型17 支持论点（结果预测 P：付费阅读 → 难产生用户黏性、未来不会走得太远）。套用母题方法：D 项给出完整推理链"无免费阅读 → 无法吸引用户 → 缺少用户支撑 → 无法维持下去"，直接肯 P，力度最强，正确；A 项"可满足需求、可能走得很远"是怼 P 法削弱，方向相反；B 项"近年来"是过去分析，题干预测未来，时间不一致；C 项方向虽一致，但"可能""有些"均为弱化词，支持力度弱；E 项引入与网络文学、财经类 App 的比较，题干无此比较对象，无关新比较。故本题选择 D。</p>
+<div class="note solve-only" data-ch="7"><p><strong>错因笔记（忽略力度词原则）：</strong> 误选 C。C 的内容方向确实与专家观点一致，但"可能""有些"两个弱化词使其力度大打折扣；D 用"如果……就无法……；而一旦……就无法……"的必然性链条直接肯 P，力度远强。识别规则：支持/削弱题遇到多个方向一致的选项时，先比力度词——"必然、只要就、无法"类强词优于"可能、有些、或许"类弱词；弱化词选项只在无强词选项时才可考虑。</p></div>
+</div></div>
+<h3 id="t7_3" class="topic" data-ch="7">措施目的断定的支持：现有/其他措施不可行<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="7"><p><strong>措施目的断定的支持：现有/其他措施不可行</strong></p><p>题干指出"必须"使用某种措施时：指出有其他可行措施 → 削弱；指出现有措施不可行或其他措施不可行 → 支持。选项只谈研究/现象本身的好处、属性、来源而与"措施"无关的，均为无关选项，一律排除。</p></div>
+<div class="pcard" data-ans="B" data-ch="7"><div class="pstem"><div class="prob"><span class="pid">7讲342-例5.12</span><span class="cbs"><span class="cb" data-p="7讲342-例5.12" data-k="0" title="点击标记"></span><span class="cb" data-p="7讲342-例5.12" data-k="1" title="点击标记"></span><span class="cb" data-p="7讲342-例5.12" data-k="2" title="点击标记"></span></span><span class="stem">（2021-例5.12）最近一项科学观测显示，太阳产生的带电粒子流即太阳风，含有数以千计的"滔天巨浪"，其时速会突然暴增，可能导致太阳磁场自行反转，甚至会对地球产生有害影响。但目前我们对太阳风的变化及其如何影响地球知之甚少。据此有专家指出，为了更好地保护地球免受太阳风的影响，必须更新现有的研究模式，另辟蹊径研究太阳风。以下哪项如果为真，最能支持上述专家的观点？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 最新观测结果不仅改变了天文学家对太阳风的看法，而且将改变其预测太空天气事件的能力。</span><span class="opt" data-l="B">B. 目前，根据标准太阳模型预测太阳风变化所获得的最新结果与实际观测相比，误差为 10～20 倍。</span><span class="opt" data-l="C">C. 对太阳风的深入研究，将有助于防止太阳风大爆发时对地球的卫星和通信系统乃至地面电网造成的影响。</span><span class="opt" data-l="D">D. 太阳风里有许多携带能量的粒子和磁场，而这些磁场会发生意想不到的变化。</span><span class="opt" data-l="E">E. "高速"太阳风源于太阳南北极的大型日冕洞，而"低速"太阳风则来自太阳赤道上的较小日冕洞。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：论证逻辑·支持题——模型17 支持论点（措施目的断定：为更好保护地球［目的］，必须更新现有研究模式［措施］）。套用母题方法：题干用"必须"锁定措施，支持方向是"现有措施不可行"。B 项指出现有标准太阳模型预测误差达 10～20 倍，现有措施不可行，故有必要"更新"研究模式，直接支持；A 项谈最新观测结果的影响，与措施无关；C 项谈深入研究的好处，支持的是"研究太阳风"而非"必须更新模式"，与措施无关；D 项仅指出太阳风的属性，与措施无关；E 项谈高速/低速太阳风的来源，与措施无关。故本题选择 B。</p>
+</div></div>
+<h3 id="t7_4" class="topic" data-ch="7">"除哪项外均能支持"反向题：逐项定性法<span class="cnt">2 题</span></h3>
+<div class="box solve-only" data-ch="7"><p><strong>"除哪项外均能支持"反向题：逐项定性法</strong></p><p>问法为"以下除哪项外，都能/均可以支持"时，逐项定性为"支持 / 削弱 / 无关"，答案是无关项（或削弱项）。常见支持角度：① 保证实验有效性（评估有标准、测量准确）；② 搭桥（连接题干两个概念，如"灰质 ↔ 智力"）；③ 排除他因；④ 解释机制使论证链条成立。常见不支持的干扰：话题偷换（谈"早期表现与智商的关系"，而非题干的"智商变化"）；方向相反（题干是"满足感下降 → 潜意识要求吃更多糖"，选项却说"潜意识支配满足感"）。拿不准时对每个选项问一句"它让结论更可信吗"，答不上来即无关项。</p></div>
+<div class="pcard" data-ans="D" data-ch="7"><div class="pstem"><div class="prob"><span class="pid">真题2017-味蕾恶性循环</span><span class="cbs"><span class="cb" data-p="真题2017-味蕾恶性循环" data-k="0" title="点击标记"></span><span class="cb" data-p="真题2017-味蕾恶性循环" data-k="1" title="点击标记"></span><span class="cb" data-p="真题2017-味蕾恶性循环" data-k="2" title="点击标记"></span></span><span class="stem">（2017管理真题）一些志愿者参与的评估饮料甜度的试验结果显示，那些经常喝含糖饮料且体型较胖的人，对同一种饮料甜度的评估等级要低于体型正常者的评估等级。这说明他们的味蕾对甜味的敏感度已经下降。试验结果还显示那些体型较胖者在潜意识中就倾向于选择更甜的食物。这说明吃太多糖可能形成了一种恶性循环，即经常吃糖会导致味蕾对甜味的敏感度下降，吃同样多的糖带来的满足感下降，潜意识里就会要求吃更多的糖，其结果就是摄入糖分太多导致肥胖。以下除了哪项，均可以支持上述论证？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 饮料甜度的评估等级是有标准的。</span><span class="opt" data-l="B">B. 志愿者能够比较准确地对饮料甜度做出评估。</span><span class="opt" data-l="C">C. 喜欢吃甜食的人往往不能抵挡甜味的诱惑。</span><span class="opt" data-l="D">D. 满足感是受潜意识支配的。</span><span class="opt" data-l="E">E. 人们往往不能控制自己的满足感。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：论证逻辑·支持题——模型17 支持论点，问法为"除了哪项均可以支持"的反向选择。论证链条：吃糖多 → 味蕾对甜味敏感度下降 → 满足感下降 → 潜意识要求吃更多糖 → 肥胖（恶性循环）。逐项定性：A 项"评估等级有标准"与 B 项"志愿者能准确评估"均保证实验测量有效，实验有效性支持，排除；C 项"不能抵挡甜味的诱惑"解释了"潜意识要求吃更多糖 → 实际吃更多"这一环节，解释机制，支持，排除；E 项"不能控制自己的满足感"说明满足感下降后难以自我纠正，恶性循环难以打破，支持，排除；D 项"满足感受潜意识支配"方向相反——题干是满足感下降驱动潜意识产生更多需求（满足感 → 潜意识行为），D 却说是潜意识支配满足感，话题方向偷换，不能支持。故本题选择 D。</p>
+</div></div>
+<div class="pcard" data-ans="E" data-ch="7"><div class="pstem"><div class="prob"><span class="pid">真题2012-灰质与智商变化</span><span class="cbs"><span class="cb" data-p="真题2012-灰质与智商变化" data-k="0" title="点击标记"></span><span class="cb" data-p="真题2012-灰质与智商变化" data-k="1" title="点击标记"></span><span class="cb" data-p="真题2012-灰质与智商变化" data-k="2" title="点击标记"></span></span><span class="stem">（2012管理真题）某研究人员在 2004 年对一些 12～16 岁的学生进行了智商测试，测试得分为 77～135 分，4 年之后再次测试，这些学生的智商得分为 87～143 分。仪器扫描显示，那些得分提高了的学生，其脑部比此前呈现更多的灰质（灰质是一种神经组织，是中枢神经的重要组成部分）。这一测试表明，个体的智商变化确实存在，那些早期在学校表现并不突出的学生未来仍有可能成为佼佼者。以下除哪项外，都能支持上述实验结论？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 随着年龄的增长，青少年脑部区域的灰质通常会增加。</span><span class="opt" data-l="B">B. 学生的非语言智力表现与他们的大脑结构的变化明显相关。</span><span class="opt" data-l="C">C. 言语智商的提高伴随着大脑左半球运动皮层灰质的增多。</span><span class="opt" data-l="D">D. 有些天才少年长大后的智力并不出众。</span><span class="opt" data-l="E">E. 部分学生早期在学校表现不突出与其智商有关。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：论证逻辑·支持题——模型17 支持论点，问法为"除哪项外都能支持"的反向选择。实验结论：个体智商变化确实存在（早期不突出者未来仍可能成为佼佼者）。逐项定性：A 项说明青少年灰质随年龄通常增加，佐证"得分提高者灰质更多"并非异常个例，智商变化有生理基础，支持，排除；B 项"非语言智力表现与大脑结构变化明显相关"在灰质（大脑结构）与智力之间搭桥，支持，排除；C 项"言语智商提高伴随灰质增多"同样在灰质与智商之间搭桥，支持，排除；D 项"天才少年长大后智力并不出众"从下降方向说明智商确实会变化，支持"智商变化确实存在"，排除；E 项"早期在校表现不突出与其智商有关"谈的是早期表现与智商的关系，而题干结论是"智商会变化、早期不突出者未来可能变好"，话题偷换，不能支持。故本题选择 E。</p>
+<div class="note solve-only" data-ch="7"><p><strong>错因笔记（做对但无法辨析选项）：</strong> 本题虽选对 E，但考场上无法逐项说清 A～D 为何能支持，辨析靠的是"感觉"而非方法。巩固规则：反向支持题必须逐项定性——A 是"佐证生理基础"、B/C 是"搭桥（灰质 ↔ 智力）"、D 是"反向例证智商会变化"，四种支持样貌都要能叫出名字；E 的错法是话题偷换："早期表现与智商有关"≠"智商会变化"。对每个选项强制问一句"它让'智商变化确实存在'更可信吗"，答不上来的就是答案。</p></div>
+</div></div>
+<h3 id="t7_5" class="topic" data-ch="7">支持题：论据与结论概念跳跃时用搭桥法<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="7"><p><strong>支持题：论据与结论概念跳跃时用搭桥法</strong></p><p>论据中的概念与结论中的概念不一致（如论据谈"可信的内容叙事"，结论谈"观众的信任"）时，支持的关键是搭桥——找出把两个概念连起来的选项（"能获得信任的内容必须构建可信的叙事"）。干扰项特征：只复述背景、谈相邻但不同的话题（"留住观众"≠"获得信任"、"个人口碑"≠"观众信任"）、或转向平台治理等新话题，均不能搭桥。</p></div>
+<div class="pcard" data-ans="B" data-ch="7"><div class="pstem"><div class="prob"><span class="pid">模考1-30</span><span class="cbs"><span class="cb" data-p="模考1-30" data-k="0" title="点击标记"></span><span class="cb" data-p="模考1-30" data-k="1" title="点击标记"></span><span class="cb" data-p="模考1-30" data-k="2" title="点击标记"></span></span><span class="stem">（2027海绵择校模考第1场-30）短视频行业快速发展，不少创作者为博取流量，刻意杜撰各类草根"励志逆袭故事"。这类人为编造的故事夸大情节、虚构经历，违背客观事实。只有尊重客观事实，才能构建可信的内容叙事。很多人担忧，这类虚假故事会误导大众认知。因此，编造的逆袭故事难以获得观众的信任。以下哪项如果为真，最能支持上述论证？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 短视频创作者作为内容输出者，其创作故事会潜移默化影响观众的价值判断。</span><span class="opt" data-l="B">B. 能够获得观众信任的内容必须构建可信的内容叙事。</span><span class="opt" data-l="C">C. 不少创作者缺乏求真意识，随意虚构情节，这类故事很难长期留住观众。</span><span class="opt" data-l="D">D. 短视频平台出台社区规范，严厉打击杜撰虚假故事博眼球的创作行为。</span><span class="opt" data-l="E">E. 虚假故事短期内可以收获很高播放量，但长期会损害创作者个人口碑。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：论证逻辑·支持题——模型17 支持论点。梳理论证链：论据"只有尊重客观事实，才能构建可信的内容叙事"（可信叙事 → 尊重事实），编造的故事违背事实 → 无法构建可信叙事；结论"难以获得观众的信任"。论据概念是"可信叙事"，结论概念是"观众信任"，二者不一致，优先搭桥法。B 项"能够获得观众信任的内容必须构建可信的内容叙事"（信任 → 可信叙事），与论据串联：违背事实 → 不可信叙事 → 不能获得信任，论证链闭合，正确。A 项谈"影响价值判断"，支持的是"误导大众认知"的担忧而非结论；C 项"很难长期留住观众"，留住观众 ≠ 获得信任，话题偷换；D 项谈平台打击行为，与能否获得信任无关；E 项"损害创作者个人口碑"，口碑 ≠ 观众对该故事的信任，话题偷换。故本题选择 B。</p>
+</div></div>
+<h3 id="t7_6" class="topic" data-ch="7">因果断定的支持：给出因果机制（因果相关）<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="7"><p><strong>因果断定的支持：给出因果机制（因果相关）</strong></p><p>观点是"X 导致/降低 Y"的因果断定时，最强支持是给出 X → Y 的机制链条（因果相关），使相关上升为可信的因果。干扰项特征：只给"相关"不给机制（无对照的单组数据）；只谈疾病本身的机理而不涉及 X；谈"尚待验证"是削弱；谈其他治疗手段是无关。</p></div>
+<div class="pcard" data-ans="B" data-ch="7"><div class="pstem"><div class="prob"><span class="pid">模考1-37</span><span class="cbs"><span class="cb" data-p="模考1-37" data-k="0" title="点击标记"></span><span class="cb" data-p="模考1-37" data-k="1" title="点击标记"></span><span class="cb" data-p="模考1-37" data-k="2" title="点击标记"></span></span><span class="stem">（2027海绵择校模考第1场-37）阿尔茨海默病是老年人群高发的认知衰退疾病，是医学研究的重点课题。研究团队统计多国老年人群的长期随访数据，剔除年龄、基础慢性病、教育水平等干扰因素后发现：经常坚持户外日光照射的老年人，罹患阿尔茨海默病的风险显著更低。据此，王教授认为，适度日光照晒能够降低阿尔茨海默病的患病风险。以下哪项如果为真，最能支持王教授的观点？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 对两百多名老年人的追踪研究表明，坚持每日户外日晒的老人中，只有一小部分患阿尔茨海默病。</span><span class="opt" data-l="B">B. 维生素 D 可以保护大脑神经细胞，减少 β 淀粉样蛋白在脑组织沉积，而皮肤接触日光能够高效合成维生素 D。</span><span class="opt" data-l="C">C. 大脑海马区负责记忆功能，如果该区域受损，就容易出现认知衰退，诱发阿尔茨海默病。</span><span class="opt" data-l="D">D. 目前还没有大规模长期临床试验充分证实日光照射对该病的预防效果，结论仍有待验证。</span><span class="opt" data-l="E">E. 某药企正在研发针对阿尔茨海默病的靶向新药，已经进入二期临床试验，获得不少资本投入。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：论证逻辑·支持题——模型17 支持论点（原因断定 P：日光照射 → 降低阿尔茨海默病风险）。套用支持五法：B 项给出完整因果机制——日光 → 高效合成维生素 D → 保护大脑神经细胞、减少 β 淀粉样蛋白沉积 → 降低患病风险，因果相关，支持力度最强，正确。A 项只给出"日晒老人中只有一小部分患病"的单组数据，无不日晒对照组，无法确定因果，力度弱；C 项只谈海马区受损诱发该病，未涉及日光，无关；D 项"结论仍有待验证"是削弱；E 项谈药企研发新药，无关。故本题选择 B。</p>
+</div></div>
+<h2 id="ch8" class="chapter" data-ch="8"><span class="chnum">08</span>第八章 假设<span class="cnt">1 题</span></h2>
+<h3 id="t8_1" class="topic" data-ch="8">假设题：搭桥法与取非验证<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="8"><p><strong>假设题：搭桥法与取非验证</strong></p><p>模型18 假设题。题干中 S1 与 S2 不一致或 P1 与 P2 不一致时，优先考虑搭桥法（把不一致的概念连起来）；无明显搭桥项时逐项分析。取非验证：假设选项为假，若题干结论因此无法成立，则此项必须假设。常见排除：对象不一致（题干谈"比较复杂的事"，选项谈"大多数/不复杂的"）；无关新比较（题干无比较，选项引入"与 XX 相比"）；假设过度（题干只要求"属于/优于"，选项说"最主要/总是正确"）；诉诸人身（"某人诚实"等人身评价与论证无关）。</p></div>
+<div class="pcard" data-ans="E" data-ch="8"><div class="pstem"><div class="prob"><span class="pid">7讲372-题20</span><span class="cbs"><span class="cb" data-p="7讲372-题20" data-k="0" title="点击标记"></span><span class="cb" data-p="7讲372-题20" data-k="1" title="点击标记"></span><span class="cb" data-p="7讲372-题20" data-k="2" title="点击标记"></span></span><span class="stem">（7讲·专项训练5题20）莱布尼兹是 17 世纪伟大的哲学家。他先于牛顿发表了他的微积分研究成果。但是当时牛顿公布了他的私人笔记，说明他至少在莱布尼兹发表其成果的 10 年前已经运用了微积分的原理。牛顿还说，在莱布尼兹发表其成果的不久前，他在给莱布尼兹的信中谈起过自己关于微积分的思想。但是事后的研究说明，牛顿的这封信中，有关微积分的几行字几乎没有涉及这一理论的任何重要之处。因此，可以得出结论：莱布尼兹和牛顿各自独立地发现了微积分。以下哪项是上述论证必须假设的？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 莱布尼兹在数学方面的才能不亚于牛顿。</span><span class="opt" data-l="B">B. 莱布尼兹是个诚实的人。</span><span class="opt" data-l="C">C. 没有第三个人不迟于莱布尼兹和牛顿独立地发现了微积分。</span><span class="opt" data-l="D">D. 莱布尼兹发表微积分研究成果前从没有把其中的关键性内容告诉任何人。</span><span class="opt" data-l="E">E. 莱布尼兹和牛顿都没有从第三渠道获得关于微积分的关键性细节。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：论证逻辑·假设题——模型18 假设论点（牛顿与莱布尼兹的信中没有涉及微积分理论的任何重要之处 P1 → 二人各自独立地发现了微积分 P2）。套用母题方法：P1 与 P2 不一致，优先考虑搭桥法，但选项中不存在明显的搭桥项，故逐项分析。A 项题干不涉及二人在数学方面才能的比较，无关新比较，排除；B 项"莱布尼兹是个诚实的人"与论证无关，且犯了诉诸人身的逻辑错误，排除；C 项有没有第三个人独立发现微积分，并不影响牛顿、莱布尼兹是否独立发现微积分，排除；D 项取非验证：假设莱布尼兹告诉了他的孩子，但他的孩子并没有告诉牛顿，则二人仍可能独立发明微积分，故此项不必假设，排除；E 项除了"信件"以外没有第三渠道，那就建立了"信中没提"和"独立"的等价性，必须假设——取非验证：假设此项为假，则两人通过其他方式获取到了对方关于微积分的关键性细节，那么他们的发现就存在互相借鉴的可能性，就不是互相独立的，题干结论无法成立，故此项必须假设。故本题选择 E。</p>
+</div></div>
+<h2 id="ch9" class="chapter" data-ch="9"><span class="chnum">09</span>第九章 解释<span class="cnt">3 题</span></h2>
+<h3 id="t9_1" class="topic" data-ch="9">数字比例型矛盾的解释：分子分母思维<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="9"><p><strong>数字比例型矛盾的解释：分子分母思维</strong></p><p>待解释的矛盾涉及"占比/比例"变化时，先写公式：占比 = 分子 ÷ 分母。能解释的选项必须能改变分子与分母的相对关系（使分子相对变大或分母相对变小，如单价/费用上涨使分子膨胀）；只谈总量、绝对数变化的选项改变不了占比，不能解释。同时注意话题锁定：题干谈"赔付金额"，选项谈"保险金"属无关选项；与题干趋势同向加剧矛盾的选项（如法规更严→事故更少）也不能解释。</p></div>
+<div class="pcard" data-ans="B" data-ch="9"><div class="pstem"><div class="prob"><span class="pid">7讲394-例6.9</span><span class="cbs"><span class="cb" data-p="7讲394-例6.9" data-k="0" title="点击标记"></span><span class="cb" data-p="7讲394-例6.9" data-k="1" title="点击标记"></span><span class="cb" data-p="7讲394-例6.9" data-k="2" title="点击标记"></span></span><span class="stem">（2005在职MBA真题·例6.9）1970 年，U 国汽车保险业的赔付总额中，只有 10% 用于赔付汽车事故造成的人身伤害。而 2000 年，这部分赔付金所占的比例上升到 50%，尽管这 30 年来 U 国的汽车事故率呈逐年下降的趋势。以下哪项如果为真，最有助于解释上述看起来矛盾的现象？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 这 30 年来，U 国汽车的总量呈逐年上升的趋势。</span><span class="opt" data-l="B">B. 这 30 年来，U 国的医疗费用显著上升。</span><span class="opt" data-l="C">C. 2000 年 U 国的交通事故数量明显多于 1970 年。</span><span class="opt" data-l="D">D. 2000 年 U 国实施的新交通法规比 1970 年的更为严格。</span><span class="opt" data-l="E">E. 这 30 年来，U 国汽车保险金的上涨率明显高于此期间的通货膨胀率。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：论证逻辑·解释题。待解释的矛盾：30 年来 U 国的汽车事故率呈逐年下降的趋势，但是赔付汽车事故造成的人身伤害的资金占汽车保险业赔付总额的比例却从 10% 上升到了 50%。套用母题方法：占比 = 人身伤害赔付金额 ÷ 赔付总额，能解释的选项必须使分子相对变大或分母相对变小。A 项指出汽车总量上升，这可能会影响汽车事故总数，但不能解释人身伤害的赔付金额的占比变化，排除；B 项指出医疗费用显著上升，如果每次事故中人身伤害医疗成本大幅上涨，那么即使事故减少，人身伤害赔付金额在总赔付中的占比也可能上升，可以解释，正确；C 项指出 2000 年交通事故数量明显多于 1970 年，交通事故数量增加可能影响总赔付，但不一定改变人身伤害赔付占比，除非人身伤害事故比例增加，不能解释，排除；D 项指出 2000 年交通法规更严格，这应该会减少事故或伤害，反而有可能会使人身伤害赔付占比下降，与题干中"占比上升"矛盾，排除；E 项题干分析的是"赔付金额"，而此项涉及的是"保险金"的情况，无关选项，排除。故本题选择 B。</p>
+<div class="note solve-only" data-ch="9"><p><strong>错因笔记（占比题误看总量）：</strong> 误选 A。"汽车总量上升"听起来能解释赔付变多，但题干矛盾是<strong>占比</strong>从 10% 升到 50%，而非赔付总额变多——总量上升不影响分子分母的相对关系。识别规则：凡题干矛盾落在"占比/比例/百分比"上，先写"占比 = 分子 ÷ 分母"，只接受能改变分子分母相对关系的选项（B 正是用"单次事故医疗成本暴涨"让分子膨胀）；谈总量、绝对数、发生率的选项一律排除。</p></div>
+</div></div>
+<h3 id="t9_2" class="topic" data-ch="9">暗含比较的解释题：从对象差异入手<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="9"><p><strong>暗含比较的解释题：从对象差异入手</strong></p><p>题干出现"最好/最强的人却结果更差"类矛盾时，往往暗含此人与其他人的比较，解释方向是<strong>对象差异</strong>——他面对的患者/任务/条件本身更难（难治的病都归他治），而非他能力差。排除口径：加剧矛盾的项（"其他人更不行"反而更说不通）；无关新比较（题干无"目前 vs 过去"，选项引入即排）；与比较无关的项（谈手术时长、其他技能）。</p></div>
+<div class="pcard" data-ans="E" data-ch="9"><div class="pstem"><div class="prob"><span class="pid">7讲396-题2</span><span class="cbs"><span class="cb" data-p="7讲396-题2" data-k="0" title="点击标记"></span><span class="cb" data-p="7讲396-题2" data-k="1" title="点击标记"></span><span class="cb" data-p="7讲396-题2" data-k="2" title="点击标记"></span></span><span class="stem">（7讲·专项训练6题2）马晓敏是眼科医院眼底手术的一把刀，也是湖城市最好的眼底手术医生，但是，令人费解的是，经马晓敏手术后，患者视力获得明显提高的比例较低。以下哪项如果为真，最有助于解释以上陈述？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 眼底手术大多是棘手的手术，需要较长的时间才能完成。</span><span class="opt" data-l="B">B. 除了马晓敏以外，湖城市眼科医院缺乏能干的眼底手术医生。</span><span class="opt" data-l="C">C. 除了眼底手术，马晓敏同时精通其他眼科手术。</span><span class="opt" data-l="D">D. 目前经马晓敏手术后患者视力获得明显提高的比例比过去有所提高。</span><span class="opt" data-l="E">E. 湖城市眼科医院难治的眼底疾病患者的手术大多数都是由马晓敏医生完成的。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：论证逻辑·解释题。待解释的现象：马晓敏是湖城市最好的眼底手术医生，但是，经马晓敏手术后，患者视力获得明显提高的比例较低。套用母题方法：注意，此题中暗含马晓敏医生与其他医生的比较。A 项说明了"眼底手术的时间"，但是并不涉及马晓敏医生的手术效果为什么比其他医生差，排除；B 项加剧了题干的矛盾，既然马晓敏医生比其他人能干，为什么她的眼底手术效果更差呢？排除；C 项题干不涉及是否同时精通"其他眼科手术"，无关选项，排除；D 项题干不涉及"目前"与"过去"手术效果的比较，无关新比较，排除；E 项说明马晓敏医生所医治的患者的病情要更加严重，因此术后视力明显提高的比例较低，可以解释题干，正确。故本题选择 E。</p>
+</div></div>
+<h3 id="t9_3" class="topic" data-ch="9">措施反效果的解释：找措施自身造成反效果的新机制<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="9"><p><strong>措施反效果的解释：找措施自身造成反效果的新机制</strong></p><p>矛盾为"某措施本想实现 X，结果反而更糟"时，解释方向首选：措施自身的运行机制恰好造成了反效果（如预约系统按时段拆分放行 → 同时段游客集中到达 → 排队更久）。排除口径：只影响少数人的项（"有些"力度弱且解释不了整体平均数）；与题干变量无关的项（设施、到达时间、停留时长 ≠ 排队等候时长）；双方都没变化的因素不能解释"变化"。</p></div>
+<div class="pcard" data-ans="B" data-ch="9"><div class="pstem"><div class="prob"><span class="pid">模考1-35</span><span class="cbs"><span class="cb" data-p="模考1-35" data-k="0" title="点击标记"></span><span class="cb" data-p="模考1-35" data-k="1" title="点击标记"></span><span class="cb" data-p="模考1-35" data-k="2" title="点击标记"></span></span><span class="stem">（2027海绵择校模考第1场-35）近年来，某景区推出线上预约购票系统，系统上线的初衷是通过限流分流，减少游客扎堆，以此降低景区内游客排队等候的时长。系统稳定运行一年后统计发现，景区整体接待游客总量没有明显变化，但游客平均排队等候时间反而比上线之前更长了。以下哪项最能解释上述看似矛盾的现象？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 线上预约系统需要游客提前登记身份信息，有些不会操作智能手机的中老年游客，只能到现场窗口排队办理购票。</span><span class="opt" data-l="B">B. 该景区线上预约系统将游客按时间段拆分放行，同一时段进入景区的游客入园时间和游览路线基本一致。</span><span class="opt" data-l="C">C. 景区配套的休息座椅、饮水点等服务设施没有随着预约系统上线同步增加。</span><span class="opt" data-l="D">D. 景区周边道路交通拥堵情况逐年加剧，很多游客抵达景区大门的时间比过去更晚。</span><span class="opt" data-l="E">E. 线上预约系统减少了无预约的临时散客，使得进入景区的游客大多是提前规划行程、停留时间更长的游客。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：论证逻辑·解释题。待解释的矛盾：预约系统旨在限流分流、减少排队，游客总量也没变，但平均排队等候时间反而更长。套用母题方法：B 项指出系统按时间段拆分放行，同一时段进入景区的游客入园时间和游览路线基本一致——总量没变，但游客被集中到相同时段同时到达，反而造成同时段扎堆排队，平均等候时间变长，措施自身的运行机制解释了反效果，正确。A 项只涉及"有些"中老年游客，解释不了整体平均数变长；C 项服务设施没有变化，不能解释"变长"这一变化，且休息设施与排队时长无直接关系；D 项谈抵达景区大门的时间更晚，与景区内排队等候时长无关；E 项谈游客停留时间更长，停留时长 ≠ 排队等候时长，话题偷换。故本题选择 B。</p>
+</div></div>
+<h2 id="ch10" class="chapter" data-ch="10"><span class="chnum">10</span>第十章 推出与结论<span class="cnt">1 题</span></h2>
+<h3 id="t10_1" class="topic" data-ch="10">收敛思维：题干断定为准，区分主观认知与客观事实<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="10"><p><strong>收敛思维：题干断定为准，区分主观认知与客观事实</strong></p><p>推出题只从题干的客观断定出发，能推即推、推不出就排除；题干的冗余信息（身份、程序、他人评价）常是误导，"承认/认为/相信"是主观认知，不等于客观事实成立。</p></div>
+<div class="pcard" data-ans="B" data-ch="10"><div class="pstem"><div class="prob"><span class="pid">W44-2009-31</span><span class="cbs"><span class="cb" data-p="W44-2009-31" data-k="0" title="点击标记"></span><span class="cb" data-p="W44-2009-31" data-k="1" title="点击标记"></span><span class="cb" data-p="W44-2009-31" data-k="2" title="点击标记"></span></span><span class="stem">（2009-31）张珊有合法与非法的概念，但没有道德上对与错的概念。由于他自己的某个行为受到起诉。尽管他承认自己的行为是非法的，但不知道这一行为事实上是不道德的。上述断定能恰当地推出以下哪项结论？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 张珊做了某种违法的事。</span><span class="opt" data-l="B">B. 张珊做了某种不道德的事。</span><span class="opt" data-l="C">C. 张珊是法律专业的毕业生。</span><span class="opt" data-l="D">D. 非法的行为不可能合乎道德。</span><span class="opt" data-l="E">E. 对于法律来说，道德上的无知不能成为借口。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 题型判定：推出结论题。方法：收敛思维——只从题干客观断定出发，排除主观认知与冗余信息的误导。题干直接断定"这一行为事实上是不道德的"，故 B 成立。A 不选："受到起诉""承认非法"是程序与主观认知，承认违法不等于事实上违法（法院可能驳回起诉）——题干这三处信息专为误导选 A 而设。C 无关项；D、E 涉及违法与道德的关系，题干未陈述，推不出。故本题选择 B。</p>
+<div class="note solve-only" data-ch="10"><p><strong>错因笔记（过度推理·主观认知当客观事实）：</strong> 误选 A。被"有合法非法概念""受到起诉""承认行为非法"三处冗余信息带偏，先入为主地推出"做了违法的事"。但起诉是程序、承认是认知，都不等于违法事实成立。识别规则：推出题中凡"承认/声称/认为/被起诉"类表述，一律标记为主观认知或程序信息，不能当作客观事实参与推理；题干直接断定的句子（"事实上是……"）才是推理起点。</p></div>
+</div></div>
+<h2 id="ch11" class="chapter" data-ch="11"><span class="chnum">11</span>第十一章 评价与焦点<span class="cnt">4 题</span></h2>
+<h3 id="t11_1" class="topic" data-ch="11">谬误类似比较：客观事实 ≠ 主观认知<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="11"><p><strong>谬误类似比较：客观事实 ≠ 主观认知</strong></p><p>"A 客观上等于 B"推不出"某人在认知上把 A 当 B"。"知道/相信/认为"等认知动词要求主观意识到，客观上的同一性不能替代主观认知。做谬误类似题，先给题干谬误定型，再找犯同类错误的选项，无须逐项搞清其他选项错在哪。</p></div>
+<div class="pcard" data-ans="C" data-ch="11"><div class="pstem"><div class="prob"><span class="pid">W5-2014-27</span><span class="cbs"><span class="cb" data-p="W5-2014-27" data-k="0" title="点击标记"></span><span class="cb" data-p="W5-2014-27" data-k="1" title="点击标记"></span><span class="cb" data-p="W5-2014-27" data-k="2" title="点击标记"></span></span><span class="stem">（2014-27）李栋善于辩论，也喜欢诡辩。有一次他论证道："郑强知道数字 87654321，陈梅家的电话号码正好是 87654321，所以，郑强知道陈梅家的电话号码。"以下哪项与李栋论证中所犯的错误最为类似？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 中国人是勤劳勇敢的，李岚是中国人，所以，李岚是勤劳勇敢的。</span><span class="opt" data-l="B">B. 金砖是由原子组成的，原子不是肉眼可见的，所以，金砖不是肉眼可见的。</span><span class="opt" data-l="C">C. 黄兵相信晨星在早晨出现，而晨星其实就是暮星，所以，黄兵相信暮星在早晨出现。</span><span class="opt" data-l="D">D. 张冉知道如果 1∶0 的比分保持到终场，他们的队伍就出线。现在张冉听到了比赛结束的哨声，所以，张冉知道他们的队伍出线了。</span><span class="opt" data-l="E">E. 所有蚂蚁是动物，所以，所有大蚂蚁是大动物。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 题型判定：评价·类似比较题（"所犯错误最为类似"），谬误类型为把客观事实当成主观认知。方法：谬误定型→比对认知动词。题干中"电话号码正好是某个数字组合"是客观事实，"知道这个数字"不等于"知道这是陈梅家的号码"——客观同一不能替代主观认知。C 项同型：晨星客观上就是暮星，推不出黄兵"相信"暮星在早晨出现。A 是集合概念误用（"中国人"集合概念被偷换为非集合）；B 是分解谬误（整体的组成部分不可见推不出整体不可见方向相反——由部分的属性推整体，合成方向误用）；D 是条件混淆（听到终场哨≠知道比分保持到终场）；E 是相对概念谬误（"大"是相对属性，不能随种类扩大而放大）。故本题选择 C。</p>
+</div></div>
+<h3 id="t11_2" class="topic" data-ch="11">论证结构拆分（箭头图题）<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="11"><p><strong>论证结构拆分（箭头图题）</strong></p><p>给论证画支持结构：先观察选项，确定论证终点（全文结论），再找各分支内部关系。标志词定位："故/所以"后是结论（小结或全文总结）；代词（"之/此"）表明顺承指代，前后是依次推理关系；话题关键词相同的几句为一支。逐一回文验证结构词，排除方向反、层级错的选项。</p></div>
+<div class="pcard" data-ans="A" data-ch="11"><div class="pstem"><div class="prob"><span class="pid">W50-2023经48</span><span class="cbs"><span class="cb" data-p="W50-2023经48" data-k="0" title="点击标记"></span><span class="cb" data-p="W50-2023经48" data-k="1" title="点击标记"></span><span class="cb" data-p="W50-2023经48" data-k="2" title="点击标记"></span></span><span class="stem">（2023经-48）有一论证，相关语句用序号表示如下：</span></div>
+<p class="pline">①然臣谓小人无朋，惟君子则有之。其故何哉？</p>
+<p class="pline">②小人所好者禄利也，所贪者财货也。</p>
+<p class="pline">③当其同利之时，暂相党引以为朋者，伪也。及其见利而争先，或利尽而交疏，则反相贼害，虽其兄弟亲戚，不能相保。</p>
+<p class="pline">④故臣谓小人无朋，其暂为朋者，伪也。</p>
+<p class="pline">⑤君子则不然。所守者道义，所行者忠信，所惜者名节。</p>
+<p class="pline">⑥以之修身，则同道而相益；以之事国，则同心而共济，终始如一。此君子之朋也。</p>
+<p class="pline">⑦故为人君者，但当退小人之伪朋，用君子之真朋，则天下治矣。</p>
+<p class="pline">如果我们利用"甲→乙"表示甲支持（或证明）乙，则以下哪项对上述论证基本结构的表示最为准确？</p>
+<div class="opts"><span class="opt" data-l="A">A. ②→③→④ 与 ⑤→⑥ 两支并列，共同支持①，①→⑦。</span><span class="opt" data-l="B">B. ④→③→② 与 ⑥→⑤ 两支并列，共同支持①，①→⑦。</span><span class="opt" data-l="C">C. ④→③→② 与 ⑤→⑥ 两支并列，共同支持①，①→⑦。</span><span class="opt" data-l="D">D. ②→③→④ 与 ⑤→⑥ 两支并列，共同支持⑦，⑦→①。</span><span class="opt" data-l="E">E. ④→③→② 与 ⑤→⑥ 两支并列，共同支持⑦，⑦→①。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 题型判定：评价·论证结构题（箭头图表示支持关系）。方法：题项结合，先看选项定终点，再用结构词回文定位。五个选项的论证终点非①即⑦；⑦以"故"字领起，是全文结论，故终点为⑦，排除 D、E。为证明①，题干用并列两支：②③④言"小人"，④中"故"字表明④是②③的总结，应为②→③→④，排除 C；⑤⑥言"君子"，⑥中"之"指代⑤的内容，二者是依次顺承关系⑤→⑥，排除 B。故本题选择 A。</p>
+</div></div>
+<h3 id="t11_3" class="topic" data-ch="11">论证方式类似：稻草人谬误（曲解极端化）<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="11"><p><strong>论证方式类似：稻草人谬误（曲解极端化）</strong></p><p>对方主张"减少/调整 X"，回应者把它曲解为极端版本"完全取消 X"再加以质疑，属稻草人谬误（曲解对方论点）。做类似比较题先把题干谬误定型，再找同款曲解。常见干扰谬误类型：诉诸无知（"没人能证明不存在"）、诉诸权威（"老师说的"）、以偏概全（个别样本推全体）、错误二选一。</p></div>
+<div class="pcard" data-ans="D" data-ch="11"><div class="pstem"><div class="prob"><span class="pid">模考1-38</span><span class="cbs"><span class="cb" data-p="模考1-38" data-k="0" title="点击标记"></span><span class="cb" data-p="模考1-38" data-k="1" title="点击标记"></span><span class="cb" data-p="模考1-38" data-k="2" title="点击标记"></span></span><span class="stem">（2027海绵择校模考第1场-38）妈妈对女儿说："你要减少刷短视频的时间。"女儿说："那我以后完全不看手机，可以吗？"以下哪项与上述论证方式最为相似？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 小雯：为什么你相信存在外星生命？小远：因为没有人能够证明不存在外星生命。</span><span class="opt" data-l="B">B. 小诚：为什么你认为这个历史记载不可信？小乐：我的历史老师就是这么告诉我的。</span><span class="opt" data-l="C">C. 店长问顾客：您想要红茶还是绿茶？顾客：我既不要红茶，也不要绿茶。</span><span class="opt" data-l="D">D. 小林：城市应当加大资金投入完善城市公园建设。小凯：没想到你不重视公共安全，要削减警务保障经费。</span><span class="opt" data-l="E">E. 小田：我接触的两三名大四学生就业薪资很高。小苏：这么看来，本届所有毕业生收入水平都很高。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：评价·论证方式类似题。题干谬误定型：妈妈的主张是"减少"刷短视频（适度调整），女儿把它曲解为"完全不看手机"（极端版本）再反问——稻草人谬误，曲解对方论点。逐项比对：A 项"没有人能够证明不存在"属诉诸无知；B 项"历史老师告诉我的"属诉诸权威；C 项顾客只是拒绝二选一，没有曲解对方论点；D 项小林主张"加大资金完善公园建设"，小凯曲解为"不重视公共安全、要削减警务经费"——把对方的建设性主张偷换成极端负面版本，与题干同型，正确；E 项由两三名学生推全体毕业生，属以偏概全。故本题选择 D。</p>
+</div></div>
+<h3 id="t11_4" class="topic" data-ch="11">对话评价题：分别锁定双方立场的层面核心<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="11"><p><strong>对话评价题：分别锁定双方立场的层面核心</strong></p><p>评价一段对话，先各自锁定双方论述的落点"层面"（如是关心"独特性"还是"自我认同"），再找准确概括双方层面的选项。排除口径：把一方的具体例子当作其关心层面（层级不对）；过度引申出对方没说过的极端说法（"没有人能做到""想怎样就怎样"）；引入题干未涉及的内容。</p></div>
+<div class="pcard" data-ans="D" data-ch="11"><div class="pstem"><div class="prob"><span class="pid">真题2023-36</span><span class="cbs"><span class="cb" data-p="真题2023-36" data-k="0" title="点击标记"></span><span class="cb" data-p="真题2023-36" data-k="1" title="点击标记"></span><span class="cb" data-p="真题2023-36" data-k="2" title="点击标记"></span></span><span class="stem">（2023-36）甲：如今，独特性正成为中国人的一种生活追求。试想周末我穿一件心仪的衣服走在大街上，突然发现你迎面走来，和我穿得一模一样，"撞衫"的感觉八成会是尴尬之中带着一丝不快，因为自己不再独一无二。乙：独一无二真的那么重要吗？想想上世纪七十年代满大街的中山装、八十年代遍地的喇叭裤，每个人也活得很精彩。再说"撞衫"总是难免的，再大的明星也有可能"撞衫"，所谓的独特只是一厢情愿。走自己的路，不要管自己是否和别人一样。以下哪项是对甲、乙对话最恰当的评价？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 甲认为独一无二是现在每个中国人的追求，而乙认为没有人能做到独一无二。</span><span class="opt" data-l="B">B. 甲关心自己是否和别人"撞衫"，而乙不关心自己是否和别人一样。</span><span class="opt" data-l="C">C. 甲认为"撞衫"八成会让自己感到不爽，而乙认为自己想怎样就怎样。</span><span class="opt" data-l="D">D. 甲关心的是个人生活的独特性，而乙关心的是个人生活的自我认同。</span><span class="opt" data-l="E">E. 甲认为乙遇到"撞衫"无所谓，而乙认为别人根本管不着自己穿什么。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：评价·对话评价题。方法：分别锁定双方立场的层面核心。甲的落点："撞衫"让人不快是因为"自己不再独一无二"——关心的是个人生活的独特性；乙的落点："独一无二真的那么重要吗""走自己的路，不要管自己是否和别人一样"——关心的是个人生活的自我认同。D 项准确概括双方层面，正确。A 项乙并未说"没有人能做到独一无二"，过度引申；B 项甲关心的不是"是否撞衫"这一具体事件，而是其背后的独特性层面，层级不对；C 项"乙认为自己想怎样就怎样"是曲解，乙反对的是把独特当成追求，并非主张任性；E 项"别人根本管不着自己穿什么"题干未涉及。故本题选择 D。</p>
+</div></div>
+<div class="part">第三部分 综合推理</div>
+<h2 id="ch12" class="chapter" data-ch="12"><span class="chnum">12</span>第十二章 综合推理<span class="cnt">13 题</span></h2>
+<h3 id="t12_1" class="topic" data-ch="12">数量计算：概念交叉求最值（极限思考）<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="12"><p><strong>数量计算：概念交叉求最值（极限思考）</strong></p><p>多个分类维度交叉（如性别×文理科×应往届）求某类人数最值：先列等式求出各类总数，再对交叉部分用极限思考——求某类"最多/最少"，就令其重叠部分取极端值。卡壳点通常是不能直接相减的两类（含混合成分），此时改用"最多/最少"的边界转化。</p></div>
+<div class="pcard" data-ans="B" data-ch="12"><div class="pstem"><div class="prob"><span class="pid">W13-2013-47</span><span class="cbs"><span class="cb" data-p="W13-2013-47" data-k="0" title="点击标记"></span><span class="cb" data-p="W13-2013-47" data-k="1" title="点击标记"></span><span class="cb" data-p="W13-2013-47" data-k="2" title="点击标记"></span></span><span class="stem">（2013-47）据统计，去年在某校参加高考的 385 名文、理科考生中，女生 189 人，文科男生 41 人，非应届男生 28 人，应届理科考生 256 人。由此可见，去年在该校参加高考的考生中：</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 非应届文科男生多于 20 人。</span><span class="opt" data-l="B">B. 应届理科女生少于 130 人。</span><span class="opt" data-l="C">C. 非应届文科男生少于 20 人。</span><span class="opt" data-l="D">D. 应届理科女生多于 130 人。</span><span class="opt" data-l="E">E. 应届理科男生多于 129 人。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 题型判定：综合推理·数量计算题（概念交叉求最值）。方法：列等式＋极限思考。男生总数＝385−189＝196；理科男生＝196−41＝155。非应届男生 28 人兼含文理科，不能与理科男生直接相减——用极限转化：非应届理科男生最多 28 人，则应届理科男生最少＝155−28＝127 人；应届理科女生最多＝256−127＝129 人，即少于 130 人。A、C 涉及的非应届文科男生人数无法确定；D 与上界矛盾；E 应届理科男生可能恰为 127，"多于 129"不成立。故本题选择 B。</p>
+</div></div>
+<h3 id="t12_2" class="topic" data-ch="12">选人规则题：按分歧条件分类讨论，两情形共同成立即"一定选中"<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="12"><p><strong>选人规则题：按分歧条件分类讨论，两情形共同成立即"一定选中"</strong></p><p>选人/选物规则题问"哪一组一定被选中"时，选造成最大分歧的条件分类讨论（如"李选/不选"），把每条假言规则在两种情形下分别推到底；两种情形下都被选中的对象即为答案。规则翻译要点："至少选一人"=析取；"不能同时"= ¬(A∧B)；"要么都选要么都不选"= 等价（同真同假）；"如果李不选，那么周也不选"= 周 → 李。</p></div>
+<div class="pcard" data-ans="A" data-ch="12"><div class="pstem"><div class="prob"><span class="pid">模考1-44</span><span class="cbs"><span class="cb" data-p="模考1-44" data-k="0" title="点击标记"></span><span class="cb" data-p="模考1-44" data-k="1" title="点击标记"></span><span class="cb" data-p="模考1-44" data-k="2" title="点击标记"></span></span><span class="stem">（2027海绵择校模考第1场-44）剧组要从赵、钱、孙、李、周、吴六位演员里挑选若干人出演短剧，选人规则如下：（1）赵、钱两人中至少选一人；（2）孙、李两人中至少选一人；（3）赵、李不能同时入选；（4）赵、周、吴三人中至少选两人；（5）钱、孙两人要么都选，要么都不选；（6）如果李不选，那么周也不选。根据以上规则，可以推出下面哪一组是一定被选中的？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 钱、孙、吴。</span><span class="opt" data-l="B">B. 赵、吴、李。</span><span class="opt" data-l="C">C. 赵、吴、周。</span><span class="opt" data-l="D">D. 钱、孙、周。</span><span class="opt" data-l="E">E. 赵、钱、孙。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：综合推理·选人规则题。按分歧条件"李是否入选"分类讨论。情形一（李选）：由（3）赵不选，由（1）钱选，由（5）孙选；由（4）赵不选，故周、吴都选。此情形选中：钱、孙、李、周、吴。情形二（李不选）：由（2）孙选，由（5）钱选，由（6）周不选；由（4）周不选，故赵、吴都选。此情形选中：赵、钱、孙、吴。两种情形下都被选中的是钱、孙、吴，A 组一定被选中，正确。故本题选择 A。</p>
+</div></div>
+<h3 id="t12_3" class="topic" data-ch="12">数量真假话题：先锁矛盾判断，其余为真列方程<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="12"><p><strong>数量真假话题：先锁矛盾判断，其余为真列方程</strong></p><p>多人对数量下判断且"只有 1 人错"时：先找两个互相矛盾（不可能同真）的判断，唯一的错误必在其中，其余判断全部为真，据此列方程求解；再用"各家数量各不相同、总和固定"等约束试值，逐步排除冲突解直到唯一。</p></div>
+<div class="pcard" data-ans="D" data-ch="12"><div class="pstem"><div class="prob"><span class="pid">模考1-49</span><span class="cbs"><span class="cb" data-p="模考1-49" data-k="0" title="点击标记"></span><span class="cb" data-p="模考1-49" data-k="1" title="点击标记"></span><span class="cb" data-p="模考1-49" data-k="2" title="点击标记"></span></span><span class="stem">（2027海绵择校模考第1场-49）某书店一共到货 15 套教辅，分别来自于春阅、夏知、秋行、冬墨四家出版社，每家出版社至少到货 1 套教辅，并且数量各不相同。四位店员对四家出版社到货套数给出如下判断：小吴：春阅与冬墨两家出版社合计到货 6 套。小郑：夏知与秋行两家出版社合计到货 6 套。小冯：夏知与秋行两家出版社合计到货 9 套。小贺：秋行与冬墨两家出版社合计到货 11 套。已知四人的判断中只有 1 人的判断是错误的，则可以得出以下哪项？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 春阅出版社到货4套。</span><span class="opt" data-l="B">B. 夏知出版社到货2套。</span><span class="opt" data-l="C">C. 秋行出版社到货3套。</span><span class="opt" data-l="D">D. 秋行出版社到货6套。</span><span class="opt" data-l="E">E. 冬墨出版社到货6套。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：综合推理·数量真假话题。小郑（夏+秋=6）与小冯（夏+秋=9）互相矛盾，必有一错，故小吴、小贺都正确：春+冬=6，秋+冬=11。由总量 15 得：夏+秋=15−6=9，即小冯正确、小郑错误。由秋+冬=11 减春+冬=6 得：秋−春=5。结合"每家至少 1 套且数量各不相同"试值：春=1，则冬=5、秋=6、夏=9−6=3，四值 1、3、6、5 各不相同，成立；春=2，则夏=9−7=2 与春冲突，排除；春=4，则夏=0，违反"至少 1 套"；春=5，则夏为负，排除。唯一解：春阅 1 套、夏知 3 套、秋行 6 套、冬墨 5 套，D 项"秋行出版社到货 6 套"正确。故本题选择 D。</p>
+</div></div>
+<h3 id="t12_4" class="topic" data-ch="12">排班题：假言逆否压缩范围 + 配额填满 + "不完全相同"排异<span class="cnt">2 题</span></h3>
+<div class="box solve-only" data-ch="12"><p><strong>排班题：假言逆否压缩范围 + 配额填满 + "不完全相同"排异</strong></p><p>排班/值班题（每人恰好若干天、每天恰好若干人）三步：① 用确定条件触发假言逆否，把某人的可选日期压缩到最小集合后"填满"（如吴只剩周二、周四可选，则两天全占）；② 利用"每天恰好 N 人"逐日锁定满员日，把其他人挤出；③ 别忘了"各人值班日期不完全相同"类约束——若某候选安排导致两人值班表完全相同，该情形整体排除，常是破题关键。</p></div>
+<div class="pcard" data-ans="C" data-ch="12"><div class="pstem"><div class="prob"><span class="pid">模考1-51</span><span class="cbs"><span class="cb" data-p="模考1-51" data-k="0" title="点击标记"></span><span class="cb" data-p="模考1-51" data-k="1" title="点击标记"></span><span class="cb" data-p="模考1-51" data-k="2" title="点击标记"></span></span><span class="stem">（2027海绵择校模考第1场-51）赵、钱、孙、李、吴 5 人安排周一、周二、周三、周四、周五的值班任务。每个人恰好值班 2 天，每一天恰有 2 人值班，且各人所选值班日期不完全相同。已知：（1）若钱或孙在周三值班，则吴不在周一或周四值班；（2）若吴在周一或周三值班，则吴和孙都要在周五值班；（3）若钱和孙都不在周二值班，则两人也都不在周一值班；（4）吴在周五不值班，钱在周四值班。根据上述信息，可以推出以下哪项？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 钱在周一值班。</span><span class="opt" data-l="B">B. 钱在周二值班。</span><span class="opt" data-l="C">C. 孙在周二值班。</span><span class="opt" data-l="D">D. 李在周二值班。</span><span class="opt" data-l="E">E. 吴在周一值班。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：综合推理·排班题。第一步压缩吴：由（4）吴不在周五，对（2）逆否——若吴不在周五，则吴不在周一也不在周三；吴恰好值班 2 天，可选日期只剩周二、周四，故吴周二、周四都值班。第二步锁周三：吴在周四值班，使（1）的后件"吴不在周一或周四"为假，逆否得钱、孙都不在周三；周三恰有 2 人，只能从赵、李、吴中出，吴不在周三，故赵、李都在周三（周三满员）。周四由钱（条件4）与吴值班，满员。第三步定周二：周二已有吴，还需 1 人，候选钱、孙、赵、李。若赵在周二，则赵周二、周三满 2 天；此时钱、孙都不在周二，由（3）钱、孙都不在周一，周一恰需 2 人只能由赵、李值，与赵已满矛盾；同理李不在周二。若钱在周二，则钱的值班日为周二、周四，与吴完全相同，违反"各人所选值班日期不完全相同"，排除。故周二第二人只能是孙，即孙在周二值班，C 正确。故本题选择 C。</p>
+</div></div>
+<div class="pcard" data-ans="D" data-ch="12"><div class="pstem"><div class="prob"><span class="pid">模考1-52</span><span class="cbs"><span class="cb" data-p="模考1-52" data-k="0" title="点击标记"></span><span class="cb" data-p="模考1-52" data-k="1" title="点击标记"></span><span class="cb" data-p="模考1-52" data-k="2" title="点击标记"></span></span><span class="stem">（2027海绵择校模考第1场-52）赵、钱、孙、李、吴 5 人安排周一、周二、周三、周四、周五的值班任务。每个人恰好值班 2 天，每一天恰有 2 人值班，且各人所选值班日期不完全相同。已知：（1）若钱或孙在周三值班，则吴不在周一或周四值班；（2）若吴在周一或周三值班，则吴和孙都要在周五值班；（3）若钱和孙都不在周二值班，则两人也都不在周一值班；（4）吴在周五不值班，钱在周四值班。若钱在周一值班，则可以得出以下哪项？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 赵在周一值班。</span><span class="opt" data-l="B">B. 孙在周四值班。</span><span class="opt" data-l="C">C. 李在周四值班。</span><span class="opt" data-l="D">D. 若赵在周一值班，则李在周五值班。</span><span class="opt" data-l="E">E. 若李在周一值班，则赵在周一值班。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：综合推理·排班题（承上题结论）。已推得：吴在周二、周四；赵、李在周三（满员）；孙在周二；周四为钱、吴（满员），故赵、李、孙都不在周四，B、C 均假。本问附加"钱在周一值班"，故钱的值班日为周一、周四。孙已占周二，还需 1 天，只能在周一或周五：若孙在周一，则周一为钱、孙满员，赵、李只能都在周五，二人值班表同为"周三、周五"，违反"各人所选值班日期不完全相同"，排除；故孙在周五。此时周一为钱加赵、李之一，周五为孙加赵、李之另一人，即赵、李分居周一与周五（谁在哪天均可）。逐项判定：A"赵在周一"只在其中一种情形成立，推不出；D"若赵在周一值班，则李在周五值班"——赵、李必分居周一、周五，赵在周一时李必在周五，恒真，正确；E"若李在周一，则赵在周一"——周一除钱外只剩 1 个名额，李在周一时赵必在周五，该蕴涵为假。故本题选择 D。</p>
+</div></div>
+<h3 id="t12_5" class="topic" data-ch="12">数字密码题：翻译"恰 N 个数字正确/位置正确"的算术约束<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="12"><p><strong>数字密码题：翻译"恰 N 个数字正确/位置正确"的算术约束</strong></p><p>猜数字/密码题无捷径：把每条猜测翻译为两类约束——"哪几个数字在密码里"（个数约束）与"位置是否对号"（位置约束），先做集合层面推理（同数字在不同猜测中的归属互相牵制），再逐位假设排除，最后必须回代三条约束验证唯一解。</p></div>
+<div class="pcard" data-ans="E" data-ch="12"><div class="pstem"><div class="prob"><span class="pid">真题2023-42</span><span class="cbs"><span class="cb" data-p="真题2023-42" data-k="0" title="点击标记"></span><span class="cb" data-p="真题2023-42" data-k="1" title="点击标记"></span><span class="cb" data-p="真题2023-42" data-k="2" title="点击标记"></span></span><span class="stem">（2023-42）某台电脑的登录密码由 0～9 中的 6 个数组成，每个数字最多出现一次。关于该 6 位密码，已知：（1）741605 中，共有 4 个数字正确，其中 3 个位置正确，1 个位置不正确；（2）320968 中，恰有 3 个数字正确且位置正确；（3）417280 中，共有 4 个数字不正确。根据上述信息，可以得出该登录密码的前两位是</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 71。</span><span class="opt" data-l="B">B. 42。</span><span class="opt" data-l="C">C. 72。</span><span class="opt" data-l="D">D. 31。</span><span class="opt" data-l="E">E. 34。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：综合推理·数字密码题。翻译约束：（2）3、2、0、9、6、8 中恰 3 个入选且全部对号入座；（3）4、1、7、2、8、0 中恰 2 个入选（4 个不正确）；（1）7、4、1、6、0、5 中恰 4 个入选，3 个对号、1 个不对号。推理主线：2、8、0 同属于条件（2）（3），而（3）只允许 2 个入选，故（2）的 3 个入选数字中至多含 2、8、0 中的 2 个，即 3、9、6 中至少有 1 个入选。逐位假设（2）中的入选位置并联动（1）（3）排除：若 2、8、0 中的某个入选，都会使（3）的"恰 2 个正确"与（1）的"恰 4 个正确、3 个对号"相互冲突；唯一通过全部约束的密码为 341965。回代验证：（1）中 4、1、6、5 入选，4、1、5 对号、6 不对号，恰 3 对 1 错 ✓；（2）中 3、9、6 入选且对号 ✓；（3）中仅 4、1 入选 ✓。前两位为 34。故本题选择 E。</p>
+</div></div>
+<h3 id="t12_6" class="topic" data-ch="12">数值推理题：整数约束列出候选 + 反证锁定<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="12"><p><strong>数值推理题：整数约束列出候选 + 反证锁定</strong></p><p>涉及整数温度/数量范围（如"从 4°C 逐日降至 -1°C""最低不低于 -6°C"）时：先把逐日严格变化翻译为候选集合（中间值只能取某几个整数），再由差值条件算出各派生量的取值集合；问"必然成立"时，对断言找反证——假设其反面，结合条件推出不可能，即锁定答案。</p></div>
+<div class="pcard" data-ans="D" data-ch="12"><div class="pstem"><div class="prob"><span class="pid">真题2023-52</span><span class="cbs"><span class="cb" data-p="真题2023-52" data-k="0" title="点击标记"></span><span class="cb" data-p="真题2023-52" data-k="1" title="点击标记"></span><span class="cb" data-p="真题2023-52" data-k="2" title="点击标记"></span></span><span class="stem">（2023-52）入冬以来，天气渐渐寒冷。11月30日，某地气象台对未来5天的天气预报显示：未来5天每天的最高气温从4°C开始逐日下降至-1°C；每天的最低气温不低于-6°C；最低气温-6°C只出现在其中一天。预报还包含如下信息：（1）未来5天中的最高气温和最低气温不会出现在同一天，每天的最高气温和最低气温均为整数；（2）若5号的最低气温是未来5天中最低的，则2号的最低气温比4号的高4°C；（3）2号和4号每天的最高气温与最低气温之差均为5°C。根据以上预报信息，可以得出以下哪项？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 1号的最低气温比2号的高 2°C。</span><span class="opt" data-l="B">B. 3号的最高气温比4号的高 1°C。</span><span class="opt" data-l="C">C. 4号的最高气温比5号的高 1°C。</span><span class="opt" data-l="D">D. 3号的最低气温为-6°C。</span><span class="opt" data-l="E">E. 2号的最低气温为-3°C。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：综合推理·数值推理题。翻译约束：最高气温从 4°C 起逐日整数严格降至 -1°C，即第 1 天 4、第 5 天 -1，中间三天是 0、1、2、3 中任选 3 个递减排列。由（3）：2 号最低温 = 2 号最高温 −5 ∈ {−2, −3}；4 号最低温 = 4 号最高温 −5 ∈ {−4, −5}——2、4 号的最低温都不是 -6°C。反证锁最低温日：若 5 号最低温为 -6°C（五天最低），由（2）2 号最低温比 4 号高 4°C，但 4 号最低温 +4 ∈ {0, -1}，与 2 号最低温 ∈ {−2, −3} 矛盾，故 -6°C 不在 5 号；由（1）最高气温的最高值（4°C，在 1 号）与最低气温的最低值（-6°C）不同日，故 -6°C 不在 1 号；2、4 号已排除，故 -6°C 只能出现在 3 号，D 正确。余项：B 项"3 号比 4 号最高温高 1°C"只在部分排列成立；C 项 4 号与 5 号最高温之差为 1 或 2，不定；A 项 1 号最低温无法确定；E 项 2 号最低温为 -3°C 只在一种排列成立。故本题选择 D。</p>
+</div></div>
+<h3 id="t12_7" class="topic" data-ch="12">考评矩阵题：行列配额 + "无人全优"的联动排异<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="12"><p><strong>考评矩阵题：行列配额 + "无人全优"的联动排异</strong></p><p>N 人 × M 项的矩阵题（每项恰若干人优秀、每人不满贯）：先由确定条件触发假言逆否，把整列的优/劣锁满（某列缺一即其余全优）；再做"联动排异"——若某假设迫使一人五项全优，与"没有人全优"矛盾，该假设即错。突破口常在被多条假言共同牵扯的人身上。</p></div>
+<div class="pcard" data-ans="C" data-ch="12"><div class="pstem"><div class="prob"><span class="pid">真题2023-55</span><span class="cbs"><span class="cb" data-p="真题2023-55" data-k="0" title="点击标记"></span><span class="cb" data-p="真题2023-55" data-k="1" title="点击标记"></span><span class="cb" data-p="真题2023-55" data-k="2" title="点击标记"></span></span><span class="stem">（2023-55）某机关甲、乙、丙、丁4人参加本年度综合考评。在德、能、勤、绩、廉5个方面的单项考评中，他们之中都恰有3人被评为"优秀"，但没有人5个单项均被评为"优秀"。已知：（1）若甲和乙在德方面均被评为"优秀"，则他们在廉方面也均被评为"优秀"；（2）若乙和丙在德方面均被评为"优秀"，则他们在绩方面也均被评为"优秀"；（3）若甲在廉方面被评为"优秀"，则甲和丁在绩方面均被评为"优秀"。若甲在绩方面未被评为"优秀"且丁在能方面未被评为"优秀"，则可以得出以下哪项？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 甲在勤方面未被评为"优秀"。</span><span class="opt" data-l="B">B. 甲在能方面未被评为"优秀"。</span><span class="opt" data-l="C">C. 乙在德方面未被评为"优秀"。</span><span class="opt" data-l="D">D. 丙在廉方面未被评为"优秀"。</span><span class="opt" data-l="E">E. 丁在廉方面未被评为"优秀"。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：综合推理·考评矩阵题。第一步锁列：甲绩不优，而绩项恰 3 人优秀，故乙、丙、丁绩优；对（3）逆否，甲绩不优 → 甲廉不优，故廉项 3 优为乙、丙、丁；丁能不优，故能项 3 优为甲、乙、丙。第二步缩德项：由（1）逆否（甲廉不优），甲、乙在德方面不能都优秀；德项恰 3 优，故不优者必为甲、乙之一，丙、丁德必优。第三步联动排异：假设乙德优，则甲德不优；此时丙德、能、绩、廉四优，由"没有人 5 项全优"，丙勤必不优，勤项 3 优只能是甲、乙、丁——可乙德、能、勤、绩、廉随之全优，同样违反"没有人 5 项全优"，矛盾。故乙在德方面未被评为优秀，C 正确。余项验证（唯一排列下）：甲勤优、甲能优、丙廉优、丁廉优，A、B、D、E 均假。故本题选择 C。</p>
+</div></div>
+<h3 id="t12_8" class="topic" data-ch="12">多方观点关系判断：反驳 = 直接否定对方主张<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="12"><p><strong>多方观点关系判断：反驳 = 直接否定对方主张</strong></p><p>“X 反驳了 Y”的判定：X 的陈述必须正面否定 Y 的具体主张（做法不可行 / 论断不成立），才算反驳。仅指出“谁该负责”（转移责任）、“需要什么配套条件”（补充支持）、“另有隐忧”（质疑代价而非主张本身），都没有击中 Y 的主张本身，不构成反驳。逐项把各方发言与靶子主张做“是否直接冲突”的对照即可。</p></div>
+<div class="pcard" data-ans="A" data-ch="12"><div class="pstem"><div class="prob"><span class="pid">真题2025-气候观点反驳</span><span class="cbs"><span class="cb" data-p="真题2025-气候观点反驳" data-k="0" title="点击标记"></span><span class="cb" data-p="真题2025-气候观点反驳" data-k="1" title="点击标记"></span><span class="cb" data-p="真题2025-气候观点反驳" data-k="2" title="点击标记"></span></span><span class="stem">（2025-39）全球气候正在变暖。权威科学报告显示，最近 50 年的全球气候变暖主要是人类燃烧化石燃料导致的。当前，人类的生产生活排放正在逼近多个气候临界点，一旦突破这些临界点，人类的未来将面临巨大风险。如何应对？几位专家相继提出不同看法：甲：各国应当尽快停止依赖化石燃料，转向开发风能、水能、太阳能等清洁能源。乙：有些发展中国家由于经济、技术等条件的限制，目前还无法很快实现能源转型。丙：当前气候风险巨大，不能尽快实现能源转型的国家就是在破坏人类的共同家园。丁：全球气候变暖主要是发达国家 200 多年的工业排放导致的，他们更应对此负责。戊：若要求发展中国家尽快实现能源转型，发达国家就必须向他们提供资金和技术。己：所谓气候风险目前还存在不确定性，在此情况下花费巨大代价去应对并不明智。根据以上信息，可以得出以下哪项？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 乙反驳了甲。</span><span class="opt" data-l="B">B. 丙反驳了甲。</span><span class="opt" data-l="C">C. 丁反驳了甲。</span><span class="opt" data-l="D">D. 戊反驳了甲。</span><span class="opt" data-l="E">E. 己反驳了甲。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：论证评价·多方观点关系判断（“谁反驳了甲”）。甲的主张是一个普遍性对策——“各国都应当尽快转型”。乙指出有些发展中国家目前根本无法很快转型，正面否定甲主张的可行性，直接击中靶心，构成反驳，A 正确。丙强调不转型的危害，反而在为“尽快转型”加码；丁谈历史责任归属，转移话题，未否定“各国应转型”；戊给出实现转型的配套条件，是补充和支持而非否定；己质疑“花巨大代价应对不明智”，指向应对的代价与时机，未直接否定甲“停止依赖化石燃料、转向清洁能源”这一具体主张。故本题选择 A。</p>
+</div></div>
+<h3 id="t12_9" class="topic" data-ch="12">直言命题连锁推理：全称否定 + 特称肯定 ⇒ 特称否定<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="12"><p><strong>直言命题连锁推理：全称否定 + 特称肯定 ⇒ 特称否定</strong></p><p>“所有 S 都不是 P”（SEP）+“有的 M 是 P”（MIP）⇒“有的 M 不是 S”：P 中有 M 的成员，而 S 与 P 全然无关，这部分 M 必在 S 之外。考场上先找能“搭桥”的共同项（本题为“常绿树”），只有“全称否定 + 特称肯定”的组合才能必然推出特称否定结论；两个特称前提（“大部分”“少部分”）之间不能建立必然联系，凡依赖“大多数/少部分”配比的选项一律不必然。</p></div>
+<div class="pcard" data-ans="D" data-ch="12"><div class="pstem"><div class="prob"><span class="pid">真题2025-果树阔叶树</span><span class="cbs"><span class="cb" data-p="真题2025-果树阔叶树" data-k="0" title="点击标记"></span><span class="cb" data-p="真题2025-果树阔叶树" data-k="1" title="点击标记"></span><span class="cb" data-p="真题2025-果树阔叶树" data-k="2" title="点击标记"></span></span><span class="stem">（2025-42）某小区院子里栽种了许多树，既有常绿树，也有落叶树。其中，针叶树都是常绿树，阔叶树都不是常绿树；针叶树大都属于观赏树种；果树大部分不是常绿树，少部分是常绿树。根据以上信息，关于小区院子里栽种的树，可以得出以下哪项？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 针叶树有些是果树。</span><span class="opt" data-l="B">B. 阔叶树有些不是果树。</span><span class="opt" data-l="C">C. 有些针叶树不是果树。</span><span class="opt" data-l="D">D. 有些果树不是阔叶树。</span><span class="opt" data-l="E">E. 有些阔叶树是观赏树种。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：直言命题连锁推理（搭桥项“常绿树”）。果树少部分是常绿树 → 有的果树是常绿树；阔叶树都不是常绿树（全称否定）→ 这部分常绿果树必不是阔叶树，即“有些果树不是阔叶树”必然为真，D 正确。A：针叶树与果树之间只有“常绿树”一个肯定桥，两个肯定前提推不出交叉关系。B：阔叶树全不是常绿树，果树大部分也不是常绿树——“大部分不是”允许常绿果树之外的部分容纳全部阔叶树，不必然。C：果树中“少部分是常绿树”不等于“常绿果树数量少于针叶树”，全部针叶树理论上可被常绿果树覆盖，不必然。E：观赏树种的信息只挂在针叶树上，与阔叶树无关。故本题选择 D。</p>
+</div></div>
+<h3 id="t12_10" class="topic" data-ch="12">排班题进阶：人次配额 + 同时段唯一性，“全单独假设”反证<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="12"><p><strong>排班题进阶：人次配额 + 同时段唯一性，“全单独假设”反证</strong></p><p>排班题先算总人次并锁定各人场次数（总人次 = 共同监考考场 ×2 + 单独考场 ×1；每人 2~3 场 ⇒ 确定谁 3 场谁 2 场）。同一时段一人只能监一场。“X 至少有一场共同监考”类结论用反证：假设 X 全部单独监考，列出其可占时段（受“不在上午”“不连续”等限制压缩），若此举挤爆共同监考时段的人次容量或使他人条件无法满足，则假设不成立。附加条件触发的假言（肯 P 必肯 Q）先展开为具体场次约束再做反证。</p></div>
+<div class="pcard" data-ans="E" data-ch="12"><div class="pstem"><div class="prob"><span class="pid">真题2025-监考排班54</span><span class="cbs"><span class="cb" data-p="真题2025-监考排班54" data-k="0" title="点击标记"></span><span class="cb" data-p="真题2025-监考排班54" data-k="1" title="点击标记"></span><span class="cb" data-p="真题2025-监考排班54" data-k="2" title="点击标记"></span></span><span class="stem">（2025-54）某学院尚余 9 个考场的监考任务供甲、乙、丙、丁、戊 5 位老师选择。已知，每场考试 2 小时，每位老师均需监考 2~3 个考场；有 2 个考场要求其中 2 人共同监考；其余 7 个考场要求单独监考，各需 1 名监考人员。时间安排：上午场——周二 1 个、周三 1 个、周五 1 个考场；下午场——周四 2 个考场（同时进行）；晚上场——周一 1 个考场（2 人监考）、周二 1 个、周三 1 个、周四 1 个考场（2 人监考）。丙、丁没有任何要求，但其他 3 位老师要求如下：甲：我的监考需安排在晚上，但不要连续两个晚上都安排监考；乙：若我的监考没有都安排在前三天，则有一场需安排我和丙在同一天同一时间监考；戊：我想监考三场，但都不要安排在上午。事后得知这 3 位老师的要求均得到了满足。若周五安排乙监考，则可以得出以下哪项？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. 甲都是单独监考。</span><span class="opt" data-l="B">B. 乙有一场共同监考。</span><span class="opt" data-l="C">C. 丙都是共同监考。</span><span class="opt" data-l="D">D. 丁有一场共同监考。</span><span class="opt" data-l="E">E. 戊至少有一场共同监考。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：综合推理·排班题（人次配额 + 反证）。总人次 = 2×2 + 7 = 11；戊 3 场，故甲、乙、丙、丁各 2 场。附加条件：乙在周五（上午唯一场），属“没有都在前三天”，肯 P 必肯 Q——乙、丙须有一场同天同时监考（共同监考场或周四下午两场分监皆可满足）。反证 E：假设戊全部单独监考。戊 3 场不在上午、同时段只能占一场，可选单独时段仅有“周四下午（至多 1 场）、周二晚、周三晚”——恰好占满。此时晚上只剩周一晚（2 人）、周四晚（2 人）共 4 人次；甲的 2 场只能取周一晚 + 周四晚（其余组合均连续两晚），于是周一晚、周四晚各只剩 1 个人次空位。乙的第二场须与丙同天同时：周四下午另一场已被戊占，只剩 1 个位置容不下乙丙两人；周一晚、周四晚各剩 1 位也容不下两人同场——乙的要求必被破坏，矛盾。故戊至少有一场共同监考，E 正确。B 不必然：可构造乙 = 周五上午 + 周四下午一场、丙 = 周四下午另一场 + 周一晚（与戊同场）、戊 = 周一晚 + 周三晚 + 周四晚、甲 = 周二晚 + 周四晚、丁 = 周二上午 + 周三上午，全部条件满足而乙无共同监考。A、C、D 同理由反例排除。故本题选择 E。</p>
+</div></div>
+<h3 id="t12_11" class="topic" data-ch="12">符号序列题：按递归定义逐层"括号化"还原结构<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="12"><p><strong>符号序列题：按递归定义逐层"括号化"还原结构</strong></p><p>定义构造类符号题（基础元素 + 指令的递归生成规则）：把选项序列逐层加括号还原——先圈出所有"元素-指令-元素"的最小合法单元（任务指令），再看相邻单元之间是"直接连接"（任务指令）还是"通过一个基础元素连接"（复合任务指令）。陷阱：①连接两个单元的基础元素只能有 1 个，出现 2 个即不合法；②"复合 + 复合"直接相连没有任何规则支持，必不合法。</p></div>
+<div class="pcard" data-ans="B" data-ch="12"><div class="pstem"><div class="prob"><span class="pid">模考2-复合任务指令</span><span class="cbs"><span class="cb" data-p="模考2-复合任务指令" data-k="0" title="点击标记"></span><span class="cb" data-p="模考2-复合任务指令" data-k="1" title="点击标记"></span><span class="cb" data-p="模考2-复合任务指令" data-k="2" title="点击标记"></span></span><span class="stem">（MBA大师·27全真公益模考综合卷一）某公司开发了某项新技术，由技术部张总监基于基础元素、任务指令构造合法工作任务，以此来测试新技术功能。已知：（1）基础元素有 a、b、c、d、e、f，任务指令有 X、Y、Z；（2）如果两个基础元素通过一个任务指令连接，则它们构成一个任务指令；（3）如果两个任务指令直接连接，则它们构成一个任务指令；（4）如果两个任务指令通过一个基础元素连接，则它们构成一个复合任务指令。根据上述信息，以下哪项是复合任务指令？</span></div>
+<div class="opts"><span class="opt" data-l="A">A. aYbZXdXaY。</span><span class="opt" data-l="B">B. aYbcdZaX。</span><span class="opt" data-l="C">C. fXaZbZbY。</span><span class="opt" data-l="D">D. aZdXacdXf。</span><span class="opt" data-l="E">E. XbYaZdcY。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 模型判定：综合推理·符号序列结构判定（按递归定义括号化）。逐项还原：B 项 aYbcdZaX = (aYb) c (dZa) X——aYb 与 dZa 均为任务指令，两者通过唯一一个基础元素 c 连接，符合条件（4），是复合任务指令，B 正确。A 项 (aYb) ZX (dXa) Y：任务指令之间没有基础元素连接，不符合（4）。C 项 (fXa) Z (bZb) Y：同样没有基础元素连接。D 项 (aZd) Xac (fXd)：任务指令之间有 2 个基础元素（a、c）连接，不符合（4）"一个基础元素"。E 项 XbY (aZd) cY：XbY 本身已是一个复合指令，(aZd)cY 也是复合指令，复合指令与复合指令直接拼接无任何规则支持，不符合（4）。故本题选择 B。</p>
+<div class="note solve-only"><p>错因（误选 E）：被"XbY"的外形迷惑——看到"指令-元素-指令"就当成合法连接，没先验证 X、Y 单独是否构成任务指令、也没意识到 XbY 整体已是复合指令。复合指令之间再连接没有生成规则，"复合+复合"结构必错。教训：括号化必须从最小的"元素-指令-元素"单元开始逐层向上，不能从中间任意切开。</p></div>
+</div></div>
+<h3 id="t12_12" class="topic" data-ch="12">数量关系型结论推出：用配对关系对消双侧人数<span class="cnt">1 题</span></h3>
+<div class="box solve-only" data-ch="12"><p><strong>数量关系型结论推出：用配对关系对消双侧人数</strong></p><p>统计分类题问“哪项必定为真”时，别逐类硬算，先给人群建“配对”：同居、婚姻这类关系必为一男一女，所以“双方身份同类”（如分居者与分居者）的子群体里男女必然各占一半——凡“男性多于女性”的选项指向这类群体，可直接判假。再把题干给的性别净差放到配对表上：同类配对的人数被等量抵消，净差只能整体落到“异类配对”的另一侧，因此那一侧必然多。识别规则：同一个净差往往能同时支撑两个选项（“异类配对的一侧”与“与某类人配对的全体”），遇到“仅Ⅰ”“仅Ⅱ”这类只取其一的选项，先检查另一个是否也由同一净差直接推出。</p></div>
+<div class="pcard" data-ans="D" data-ch="12"><div class="pstem"><div class="prob"><span class="pid">真题2002-分居者同居</span><span class="cbs"><span class="cb" data-p="真题2002-分居者同居" data-k="0" title="点击标记"></span><span class="cb" data-p="真题2002-分居者同居" data-k="1" title="点击标记"></span><span class="cb" data-p="真题2002-分居者同居" data-k="2" title="点击标记"></span></span><span class="stem">（2002-61）在H国2000年进行的人口普查中，婚姻状况分为四种：未婚，已婚，离婚和丧偶。其中，已婚分为正常婚姻和分居；分居分为合法分居和非法分居；非法分居指分居者与人非法同居；非法同居指无婚姻关系的异性之间的同居。普查显示，非法同居的分居者中，女性比男性多100万。如果上述断定及相应的数据为真，并且上述非法同居者都为H国本国人，则以下哪项有关H国的断定必定为真？</span></div>
+<p class="pline">I. 与分居者非法同居的未婚、离婚或丧偶者中，男性多于女性。</p>
+<p class="pline">II. 与分居者非法同居的人中，男性多于女性。</p>
+<p class="pline">III. 与分居者非法同居的分居者中，男性多于女性。</p>
+<div class="opts"><span class="opt" data-l="A">A. 仅I。</span><span class="opt" data-l="B">B. 仅II。</span><span class="opt" data-l="C">C. 仅III。</span><span class="opt" data-l="D">D. 仅I和II。</span><span class="opt" data-l="E">E. I、II和III。</span></div>
+</div><button class="solTgl">查看解析 ▾</button><div class="psolve"><p class="solve-only"><strong>解析：</strong> 题型判定：综合推理·数量关系型结论推出（由统计数据选“必定为真”项）。方法：给人群建配对关系，用“同类配对必男女各半”对消人数，让净差只落在异类配对的一侧。把非法同居者按身份分成三部分：①自身是分居者（有配偶）；②自身是未婚/离婚/丧偶，而同居对象是分居者；③双方都没有婚姻。同居关系必为一男一女，故③中男女相等；①中“分居者与分居者配对”的那部分也必各占一半。已知“非法同居的分居者中女性比男性多100万”，即①全体女性比男性多100万；其中同类配对的部分男女相等、差额被抵消，这100万净差只能整体落在异类配对上：②中每多一位女性分居者，就对应多一位男性未婚/离婚/丧偶者，故②中男性多于女性，Ⅰ真。“与分居者非法同居的人”＝②全体（未婚/离婚/丧偶的一方）＋①中与分居者配对的那部分；②男性多100万，①那部分男女各半，合计仍男性多，Ⅱ真。“与分居者非法同居的分居者”即①中与分居者配对的那部分，男女各半，不可能“男性多于女性”，Ⅲ假。B只取Ⅱ而漏Ⅰ，C误判Ⅲ，E多算Ⅲ，A漏Ⅱ。故本题选择 D。本题出处：2002年1月管理类联考逻辑真题（站内编号【2002.01.61】，真题中另见【2002.1.60】【2002.10.25】）。</p>
+<div class="note solve-only" data-ch="12"><p><strong>错因笔记（同类配对未识别，漏判Ⅱ）：</strong> 误选 A。只看出Ⅰ成立，没意识到Ⅱ可由同一组人数直接推出——把“与分居者非法同居的人”当成需要额外条件的另一个命题，于是选了“仅Ⅰ”。识别规则：题干给出“某类人中男性多于女性”的净差后，这个差额在“同类配对”（分居者与分居者）里必被等量抵消，必然整体落在“异类配对”的另一侧；把“与某类人同居的人”拆成“异类配对的一侧 ＋ 同类配对的两侧”，后一部分男女各半、不影响差额方向，所以Ⅰ和Ⅱ同真。凡选项只取其一（“仅Ⅰ”“仅Ⅱ”），先检查另一个是否也由同一净差推出。</p></div>
+</div></div>
+</main>
+<script>
+const KEY='ctb_logic_marks_v1';
+const DEFAULT_MARKS={"W12-2008-46":[1,1,1],"W4-2022经49":[1,1,1],"W44-2009-31":[1,1,1],"W5-2014-27":[1,1,1]};
+let marks=Object.assign({},DEFAULT_MARKS);try{marks=Object.assign({},DEFAULT_MARKS,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
+function save(){localStorage.setItem(KEY,JSON.stringify(marks));updateStat();updateNavProg();applyFlt()}
+function updateNavProg(){
+  document.querySelectorAll('.nprog').forEach(el=>{
+    const ps=el.dataset.p?el.dataset.p.split(','):[];
+    let c=0;const t=ps.length*3;
+    ps.forEach(p=>{const a=marks[p];if(a)c+=a.filter(Boolean).length});
+    el.textContent=c+'/'+t;
+    el.classList.toggle('done',t>0&&c===t);
+  });
+}
+function updateStat(){
+  const done=Object.values(marks).filter(a=>a&&a.some(Boolean)).length;
+  document.getElementById('progress').textContent=done+' / '+document.querySelectorAll('.prob').length;
+}
+document.querySelectorAll('.cb').forEach(el=>{
+  const p=el.dataset.p,k=+el.dataset.k;
+  if(marks[p]&&marks[p][k])el.classList.add('on');
+  el.onclick=()=>{
+    marks[p]=marks[p]||[0,0,0];
+    const a=marks[p];
+    // 星级式联动：点第n格则补满1~n；点已填满的最高格则退掉该格
+    const target=(a[k]&&(k===2||!a[k+1]))?k:k+1;
+    for(let i=0;i<3;i++)a[i]=i<target?1:0;
+    document.querySelectorAll(`.cb[data-p="${CSS.escape(p)}"]`).forEach((c,i)=>c.classList.toggle('on',!!a[i]));
+    save();
+  };
+});
+updateStat();
+updateNavProg();
+const openNav=()=>document.body.classList.add('nav-on');
+const closeNav=()=>document.body.classList.remove('nav-on');
+document.getElementById('navTrigger').addEventListener('mouseenter',openNav);
+document.getElementById('navBtn').onclick=()=>document.body.classList.toggle('nav-on');
+document.getElementById('navBtn2').onclick=closeNav;
+document.addEventListener('click',e=>{
+  if(!document.body.classList.contains('nav-on'))return;
+  if(e.target.closest('#side')){
+    if(e.target.closest('a'))closeNav();   // 点了具体知识点：跳转后收起
+  }else if(!e.target.closest('#navBtn')&&!e.target.closest('#navTrigger')){
+    closeNav();                            // 点击空白处收起
+  }
+});
+const NAMES={full:'完整版',terms:'题目版',know:'知识点版'};
+function resetSolveLabels(v){
+  document.querySelectorAll('.psolve').forEach(p=>p.classList.remove('force-show','force-hide'));
+  document.querySelectorAll('.solTgl').forEach(b=>b.textContent=v==='full'?'收起解析 ▴':'查看解析 ▾');
+}
+resetSolveLabels('full');
+document.querySelectorAll('.menu button').forEach(b=>{
+  b.onclick=()=>{
+    document.body.classList.remove('view-terms','view-know');
+    if(b.dataset.v!=='full')document.body.classList.add('view-'+b.dataset.v);
+    document.getElementById('modeBtn').textContent=NAMES[b.dataset.v]+' ▾';
+    document.querySelectorAll('.menu button').forEach(x=>x.classList.toggle('cur',x===b));
+    resetSolveLabels(b.dataset.v);
+  };
+});
+document.getElementById('expBtn').onclick=()=>{
+  const blob=new Blob([JSON.stringify(marks)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='逻辑错题本进度.json';a.click();
+};
+document.getElementById('impBtn').onclick=()=>document.getElementById('impFile').click();
+document.getElementById('impFile').onchange=function(){
+  const f=this.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{try{marks=JSON.parse(r.result);save();
+    document.querySelectorAll('.cb').forEach(el=>{
+      const p=el.dataset.p,k=+el.dataset.k;
+      el.classList.toggle('on',!!(marks[p]&&marks[p][k]));
+    });}catch(e){alert('文件格式不对');}};
+  r.readAsText(f);
+};
+document.querySelectorAll('.opt').forEach(el=>{
+  el.onclick=()=>{
+    const card=el.closest('.pcard'),a=card.dataset.ans;
+    if(!a)return;
+    if(el.classList.contains('right')||el.classList.contains('wrong')){
+      card.querySelectorAll('.opt').forEach(o=>o.classList.remove('right','wrong'));
+      return;
+    }
+    card.querySelectorAll('.opt').forEach(o=>o.classList.remove('right','wrong'));
+    if(el.dataset.l===a){el.classList.add('right');}
+    else{el.classList.add('wrong');card.querySelector(`.opt[data-l="${a}"]`).classList.add('right');}
+  };
+});
+document.querySelectorAll('.solTgl').forEach(b=>{
+  b.onclick=()=>{
+    const ps=b.nextElementSibling;
+    const hidden=getComputedStyle(ps).display==='none';
+    ps.classList.remove('force-hide','force-show');
+    ps.classList.add(hidden?'force-show':'force-hide');
+    b.textContent=hidden?'收起解析 ▴':'查看解析 ▾';
+  };
+});
+document.getElementById('clearBtn').onclick=()=>{
+  document.querySelectorAll('.opt').forEach(o=>o.classList.remove('right','wrong'));
+  resetSolveLabels(document.body.classList.contains('view-terms')?'terms':document.body.classList.contains('view-know')?'know':'full');
+};
+let qStr='';
+document.getElementById('q').oninput=function(){qStr=this.value.trim().toLowerCase();applyFlt()};
+// 筛选：打勾量（多选） + 章节
+let ckSel=new Set(),chSel='all';
+function applyFlt(){
+  let shown=0;
+  document.querySelectorAll('.pcard').forEach(card=>{
+    const cb=card.querySelector('.cb');
+    const pid=cb?cb.dataset.p:'';
+    const a=marks[pid]||[0,0,0];
+    const n=a.filter(Boolean).length;
+    const ok=(ckSel.size===0||ckSel.has(String(n)))&&(chSel==='all'||card.dataset.ch===chSel)&&(!qStr||card.textContent.toLowerCase().includes(qStr));
+    card.classList.toggle('hide',!ok);
+    if(ok)shown++;
+  });
+  // 无可见题目的考点/章节整体隐藏（含其下的知识点框、笔记），分部标记仅在章节筛选时隐藏
+  const chOnly=chSel!=='all';
+  let chEl=null,chKids=[],tpEl=null,tpKids=[],chHas=false,tpHas=false;
+  const finT=()=>{if(tpEl){const h=!tpHas;tpEl.classList.toggle('hide',h);tpKids.forEach(k=>k.classList.toggle('hide',h));}};
+  const finC=()=>{finT();if(chEl){const h=!chHas;chEl.classList.toggle('hide',h);chKids.forEach(k=>k.classList.toggle('hide',h));}};
+  [...document.getElementById('main').children].forEach(el=>{
+    const c=el.classList;
+    if(c.contains('part')){finC();chEl=null;chKids=[];tpEl=null;tpKids=[];chHas=tpHas=false;c.toggle('hide',chOnly);}
+    else if(c.contains('chapter')){finC();chEl=el;chKids=[];tpEl=null;tpKids=[];chHas=tpHas=false;}
+    else if(c.contains('topic')){finT();tpEl=el;tpKids=[];tpHas=false;}
+    else if(c.contains('pcard')){if(!c.contains('hide')){tpHas=true;chHas=true;}}
+    else if(tpEl)tpKids.push(el);
+    else if(chEl)chKids.push(el);
+  });
+  finC();
+  const st=document.getElementById('fltStat');
+  st.textContent=(ckSel.size===0&&chSel==='all'&&!qStr)?'':`当前筛选出 ${shown} 题`;
+}
+document.querySelectorAll('#ckFlt button').forEach(b=>{
+  b.onclick=()=>{
+    const btns=[...document.querySelectorAll('#ckFlt button')];
+    if(b.dataset.v==='all'){ckSel.clear();btns.forEach(x=>x.classList.toggle('on',x===b));}
+    else{
+      if(ckSel.has(b.dataset.v))ckSel.delete(b.dataset.v);else ckSel.add(b.dataset.v);
+      b.classList.toggle('on');
+      btns.find(x=>x.dataset.v==='all').classList.toggle('on',ckSel.size===0);
+    }
+    applyFlt();
+  };
+});
+document.getElementById('chFlt').onchange=function(){chSel=this.value;applyFlt()};
+</script>
+</body>
+</html>
